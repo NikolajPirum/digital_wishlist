@@ -2,6 +2,7 @@ package org.example.digital_wishlist.service;
 
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.example.digital_wishlist.repository.WishRepository;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,8 @@ public class WishService {
         // code to readWishlist
     }
 
-    public updateWishlist(){
+    public Wishlist updateWishlist(Wishlist wishlist){
+        repository.updateWishlist(wishlist);
         // code to updateWishlist
     }
 
