@@ -3,10 +3,10 @@ package org.example.digital_wishlist.model;
 import java.util.ArrayList;
 
 public class User {
-    private String name;
-    private String email;
-    private String password;
-    private String username;
+    private static String name;
+    private static String email;
+    private static String password;
+    private static String username;
     private ArrayList<Present> reserveList = new ArrayList<>();
 
     public User(String name, String email, String password, String username) {
@@ -26,7 +26,7 @@ public class User {
 
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
@@ -34,7 +34,7 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
+    public static String getEmail() {
         return email;
     }
 
@@ -42,7 +42,7 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
 
@@ -50,7 +50,7 @@ public class User {
         this.password = password;
     }
 
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
 
