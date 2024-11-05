@@ -2,19 +2,21 @@ package org.example.digital_wishlist.service;
 
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
-import org.example.digital_wishlist.repository.Repository;
+import org.example.digital_wishlist.repository.WishRepository;
+import org.springframework.stereotype.Service;
 
-@org.springframework.stereotype.Service
-public class Service {
+@Service
+public class WishService {
 
-    private final Repository repository;
+    private final WishRepository repository;
 
-    public Service(Repository repository) {
+    public WishService(WishRepository repository) {
         this.repository = repository;
     }
 
-    public int createUser(User user){
-        return repository.createUser(user);
+
+    public void createUser(User user){
+        repository.createUser(user);
     }
 
     public int deleteUser(int id){
@@ -28,7 +30,12 @@ public class Service {
     public int deleteWish(int id){
         return repository.deleteWish(id);
     }
-
+    public boolean findByUsername(String username){
+        return repository.findByUsername(username);
+    }
+    public boolean findUserByEmail(String email){
+        return repository.findUserByEmail(email);
+    }
     public createWishlist(){
         // code to createWishlist
     }

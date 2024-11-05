@@ -65,4 +65,7 @@ public class User {
     public void setReserveList(ArrayList<Present> reserveList) {
         this.reserveList = reserveList;
     }
+
+    public void setId(int id) {
+    }
 }
