@@ -1,6 +1,7 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -52,7 +53,10 @@ public class WishRepository {
         // code to readWishlist
     }
 
-    public updateWishlist(){
+    public int updateWishlist(Wishlist wishlist){
+        String query = "UPDATE Wishlist SET name =?, WHERE wishlist_id =?";
+        //returnere int, som er antallet af rækker, der blev påvirket af forespørgslen
+        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getWishlistId());
         // code to updateWishlist
     }
 
