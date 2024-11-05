@@ -7,6 +7,7 @@ public class Wishlist {
     private String Wishlistname;
     private ArrayList<Present> PresentList = new ArrayList<>();
     private boolean reserv = false;
+    private int userID;
 
     public Wishlist(String listName, ArrayList<Present> PresentList, boolean isReserv) {
         this.Wishlistname = listName;
@@ -22,6 +23,7 @@ public class Wishlist {
     public Wishlist(){
 
     }
+    public int getWishlistID() {return wishlistID;}
 
     public int getId() {
         return WishlistID;
@@ -50,4 +52,8 @@ public class Wishlist {
     public void setReserv(boolean reserv) {
         this.reserv = reserv;
     }
+
+    public int getUserID() { return userID; }
+
+    public void setUserID(int userID) { this.userID = userID; }
 }
