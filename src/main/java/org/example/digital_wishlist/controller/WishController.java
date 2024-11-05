@@ -19,6 +19,7 @@ public class WishController {
 
     private final WishService service;
 
+
     public WishController(WishService service) {
         this.service = service;
     }
@@ -102,7 +103,6 @@ public class WishController {
         service.createUser(user);
         model.addAttribute("success", true);
         return "create_user";
-
     }
     @GetMapping("/login")
     public String login(Model model){
@@ -128,11 +128,24 @@ public class WishController {
     }
 
 
-    /*
-    public createWishlist(){
-        // code to createWishlist
+    @GetMapping("/create_wishlist")
+    public String showCreateWishList(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = service.findUser(username);
+        model.addAttribute("wishlist", new Wishlist());
+        return "create_wishlist";
     }
 
+    @PostMapping("/create_wishlist")
+    public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
+        String username = principal.getName();
+        User user = service.findUser(username);
+
+
+        service.createWishlist(wishlistName, userId);
+
+        return "redirect:/wishListSite";
+    }
     public readUser(){
         // code to readUser
     }
@@ -152,5 +165,4 @@ public class WishController {
     public deleteWishlist(){
         // code to deleteWishlist
     }
-     */
 }

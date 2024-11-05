@@ -1,14 +1,14 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
-import org.example.digital_wishlist.model.Wishlist;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @Repository
 public class WishRepository {
@@ -53,24 +53,10 @@ public class WishRepository {
         jdbcTemplate.update(query, present.getName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
     }
 
-    public List<Present> getPresentsByWishListId(int wishListId){
-        String query = "select * from Present where WishlistID = ?";
-        return jdbcTemplate.query(query, presentRowMapper, wishListId);
-
-    }
-
-    public Wishlist getWishlist(int id){
-        String query = "select * from WishList where WishlistID = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
-    }
-
-    public List<Wishlist> getAllWishLists(){
-        String query = "select * from WishList";
-        return jdbcTemplate.query(query, wishlistRowMapper);
-    }
-    /*
-    public createWishlist(){
+    public void createWishlist(Wishlist wishlist){
         // code to createWishlist
+        String query ="insert into wishlist(WishlistID, WishlistName, UserID) values (?, ?, ?)  ";
+        jdbcTemplate.update(query, wishlist.getWishlistID(),wishlist.getListName(),wishlist.getUserID());
     }
 
     public readUser(){
@@ -103,6 +89,7 @@ public class WishRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
+        return user_exist; // Return null if no user was found
     }
 
     // Using JdbcTemplate to check if email exists
