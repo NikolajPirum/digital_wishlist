@@ -1,6 +1,7 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -19,27 +20,27 @@ public class WishRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createUser(User user){
-        String query = "insert into users (name, email, username, password) values (?, ?, ?, ?)";
-        jdbcTemplate.update(query, User.getName(), User.getEmail(), User.getUsername(), User.getPassword());
+    public void createUser(User user1){
+        String query = "insert into User (name, email, username, password) values (?, ?, ?, ?)";
+        jdbcTemplate.update(query, user1.getName(), user1.getEmail(), user1.getUsername(), user1.getPassword());
     }
 
-    public int deleteUser(int id){
-        String query = "delete from users where id = ?";
+    public void deleteUser(int id){
+        String query = "delete from user where id = ?";
         jdbcTemplate.update(query, id);
     }
 
-    public int deleteWish(int id){
+    public void deleteWish(int id){
         String query = "delete from present where id = ?";
         jdbcTemplate.update(query, id);
     }
 
-    public int addWish(Present present){
+    public void addWish(Present present){
         String query = "insert into present (id,name,price) values (?, ?, ?)";
-        jdbcTemplate.update(query, Present.getId(), Present.getName(), Present.getPrice());
+        jdbcTemplate.update(query, present.getId(), present.getName(), present.getPrice());
     }
 
-
+    /*
     public createWishlist(){
         // code to createWishlist
     }
@@ -59,46 +60,17 @@ public class WishRepository {
     public deleteWishlist(){
         // code to deleteWishlist
     }
-
-    public User findUsername(String username) {
-        String query = "select * from users where username = ?";
-
-    }
-
+    */
     public boolean findByUsername(String username) {
-        boolean user_exist = false;
-        try (Connection connection = DriverManager.getConnection(PROD_DATABASE_URL, PROD_USERNAME, PROD_PASSWORD)) {
-            String sql = "SELECT * FROM users WHERE username = ?";
-
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, username);
-                ResultSet resultSet = statement.executeQuery();
-
-                if (resultSet.next()) {
-                    user_exist = true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user_exist; // Return null if no user was found
+        String query = "SELECT COUNT(*) FROM User WHERE username = ?";
+        Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
+        return count != null && count > 0;
     }
+
+    // Using JdbcTemplate to check if email exists
     public boolean findUserByEmail(String email) {
-        boolean user_exist = false;
-        try (Connection connection = DriverManager.getConnection(PROD_DATABASE_URL, PROD_USERNAME, PROD_PASSWORD)) {
-            String sql = "SELECT * FROM users WHERE username = ?";
-
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, email);
-                ResultSet resultSet = statement.executeQuery();
-
-                if (resultSet.next()) {
-                    user_exist = true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user_exist; // Return null if no user was found
+        String query = "SELECT COUNT(*) FROM User WHERE email = ?";
+        Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
+        return count != null && count > 0;
     }
 }

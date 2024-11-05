@@ -19,16 +19,16 @@ public class WishService {
         repository.createUser(user);
     }
 
-    public int deleteUser(int id){
-        return repository.deleteUser(id);
+    public void deleteUser(int id){
+        repository.deleteUser(id);
     }
 
-    public int addWish(Present present){
-        return repository.addWish(present);
+    public void addWish(Present present){
+        repository.addWish(present);
     }
 
-    public int deleteWish(int id){
-        return repository.deleteWish(id);
+    public void deleteWish(int id){
+        repository.deleteWish(id);
     }
     public boolean findByUsername(String username){
         return repository.findByUsername(username);
@@ -36,6 +36,7 @@ public class WishService {
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
+    /*
     public createWishlist(){
         // code to createWishlist
     }
@@ -54,5 +55,5 @@ public class WishService {
 
     public deleteWishlist(){
         // code to deleteWishlist
-    }
+    }*/
 }

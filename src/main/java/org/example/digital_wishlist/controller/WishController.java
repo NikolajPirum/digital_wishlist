@@ -37,6 +37,7 @@ public class WishController {
         model.addAttribute("success", true);
         return "create_user";
     }
+    /*
     public createWishlist(){
         // code to createWishlist
     }
@@ -60,4 +61,5 @@ public class WishController {
     public deleteWishlist(){
         // code to deleteWishlist
     }
+     */
 }
