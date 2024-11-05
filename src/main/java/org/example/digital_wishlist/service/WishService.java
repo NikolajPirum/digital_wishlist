@@ -36,6 +36,9 @@ public class WishService {
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
+    public User findUser(String username){
+        return repository.findUser(username);
+    }
     /*
     public createWishlist(){
         // code to createWishlist

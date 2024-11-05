@@ -24,6 +24,7 @@
         <input type="password" id="password" th:field="*{password}" required />
     </div>
     <button type="submit">Create User</button>
+    <a th:href="@{/login}" class="btn btn-primary">Login</a>
     <p th:if="${success}" style="color:green">User created successfully!</p>
     <p th:if="${error}" style="color:red">Error: Username or email already exists.</p>
 </form>

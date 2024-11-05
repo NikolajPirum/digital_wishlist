@@ -1,15 +1,10 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 @Repository
 public class WishRepository {
@@ -61,10 +56,20 @@ public class WishRepository {
         // code to deleteWishlist
     }
     */
+
     public boolean findByUsername(String username) {
         String query = "SELECT COUNT(*) FROM User WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
         return count != null && count > 0;
+    }
+
+    public User findUser(String username) {
+        String query = "SELECT * FROM User WHERE username = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), username);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // or handle according to your application's needs
+        }
     }
 
     // Using JdbcTemplate to check if email exists
