@@ -1,6 +1,8 @@
 package org.example.digital_wishlist.controller;
 
+import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class WishController {
 
     private final WishService service;
+    private final WishService wishService;
 
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishService wishService) {
         this.service = service;
+        this.wishService = wishService;
     }
 
     @GetMapping("/create_user")
@@ -37,27 +41,35 @@ public class WishController {
         model.addAttribute("success", true);
         return "create_user";
     }
-    public createWishlist(){
+    public void createWishlist(){
         // code to createWishlist
     }
 
-    public readUser(){
+    public void readUser(){
         // code to readUser
     }
 
-    public readWishlist(){
+    public void readWishlist(){
         // code to readWishlist
     }
+    @GetMapping("{name}/edit")
+    public String showWishlistUpdateForm(@PathVariable("name") String name, Model model){
+        Wishlist wishlist = wishService.getWishlistByName
+    }
 
-    public updateWishlist(){
+    @PostMapping("update/presentName")
+    public void updatePresent(@ModelAttribute ("updatePresent") Present present, Model model){
+        service.updatePresent(present.getName(), present.getId());
+        model.addAttribute("changeName", present.setName());
+
         // code to updateWishlist
     }
 
-    public deleteUser(){
+    public void deleteUser(){
         // code to deleteUser
     }
 
-    public deleteWishlist(){
+    public void deleteWishlist(){
         // code to deleteWishlist
     }
 }

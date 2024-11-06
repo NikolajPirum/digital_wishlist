@@ -69,9 +69,9 @@ public class WishRepository {
         String query = "select * from Wishlist where UserId = ?";
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, username);
     }
-    public Present changeNameOnPresent(String newName, Present present){
-        String query = "UPDATE Present SET name = ? WHERE name = ?";
-        return jdbcTemplate.
+    public int updateNameOnPresent(Present present){
+        String query = "UPDATE Present SET name = ? WHERE PresentId = ?";
+        return jdbcTemplate.update(query, present.getName(), present.getId());
     }
 
     public deleteWishlist(){
@@ -119,4 +119,5 @@ public class WishRepository {
         }
         return user_exist; // Return null if no user was found
     }
+
 }

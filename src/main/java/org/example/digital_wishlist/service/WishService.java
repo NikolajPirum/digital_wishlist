@@ -57,4 +57,9 @@ public class WishService {
     public deleteWishlist(){
         // code to deleteWishlist
     }
+
+
+    public String updatePresent() {
+        String aNewValue = repository.updatePresent();
+    }
 }

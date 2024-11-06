@@ -1,9 +1,9 @@
 package org.example.digital_wishlist.model;
 
 public class Present {
-    private static int id;
-    private static int price;
-    private static String name;
+    private int id;
+    private int price;
+    private String name;
 
     public Present(int id, int price, String name) {
         this.id = id;
@@ -11,7 +11,7 @@ public class Present {
         this.name = name;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
@@ -19,7 +19,7 @@ public class Present {
         this.id = id;
     }
 
-    public static int getPrice() {
+    public int getPrice() {
         return price;
     }
 
@@ -27,7 +27,7 @@ public class Present {
         this.price = price;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
