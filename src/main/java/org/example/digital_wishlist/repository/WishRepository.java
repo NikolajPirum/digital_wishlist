@@ -1,10 +1,14 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class WishRepository {
@@ -14,6 +18,19 @@ public class WishRepository {
     public WishRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    // rowMapper til at skabe wishList objekter ud af ResultSets
+    private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
+            rs.getInt("id"),
+            rs.getString("listName")
+    );
+
+    // rowMapper til at skabe present objekter ud af ResultSets (rs)
+    private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
+            rs.getInt("id"),
+            rs.getInt("price"),
+            rs.getString("name")
+    );
 
     public void createUser(User user1){
         String query = "insert into AppUser (name, email, username, password) values (?, ?, ?, ?)";
@@ -25,16 +42,32 @@ public class WishRepository {
         jdbcTemplate.update(query, id);
     }
 
-    public void deleteWish(int id){
+    public int deleteWish(int id){
         String query = "delete from present where id = ?";
-        jdbcTemplate.update(query, id);
+        return jdbcTemplate.update(query, id);
     }
 
+    // skal også have link i databasen
     public void addWish(Present present){
-        String query = "insert into present (id,name,price) values (?, ?, ?)";
-        jdbcTemplate.update(query, present.getId(), present.getName(), present.getPrice());
+        String query = "insert into present (id,name,price,link) values (?, ?, ?, ?)";
+        jdbcTemplate.update(query, Present.getId(), Present.getName(), Present.getPrice(), Present.getLink());
     }
 
+    public List<Present> getPresentsByWishListId(int wishListId){
+        String query = "select * from present where wishlistId = ?";
+        return jdbcTemplate.query(query, presentRowMapper, wishListId);
+
+    }
+
+    public Wishlist getWishlist(int id){
+        String query = "select * from wishlist where id = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+    }
+
+    public List<Wishlist> getAllWishLists(){
+        String query = "select * from wishlist";
+        return jdbcTemplate.query(query, wishlistRowMapper);
+    }
     /*
     public createWishlist(){
         // code to createWishlist
