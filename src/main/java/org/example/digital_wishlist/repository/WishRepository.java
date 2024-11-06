@@ -16,6 +16,12 @@ public class WishRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
+        rs.getInt("WishlistId"),
+        rs.getString("Wishlistname"),
+        rs.getString("UserName")
+    );
+
     public WishRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -56,8 +62,16 @@ public class WishRepository {
     public int updateWishlist(Wishlist wishlist){
         String query = "UPDATE Wishlist SET name =?, WHERE wishlist_id =?";
         //returnere int, som er antallet af rækker, der blev påvirket af forespørgslen
-        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getWishlistId());
+        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
         // code to updateWishlist
+    }
+    public Wishlist findWishlistByUsername(String username, Wishlist wishlist){
+        String query = "select * from Wishlist where UserId = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, username);
+    }
+    public Present changeNameOnPresent(String newName, Present present){
+        String query = "UPDATE Present SET name = ? WHERE name = ?";
+        return jdbcTemplate.
     }
 
     public deleteWishlist(){
