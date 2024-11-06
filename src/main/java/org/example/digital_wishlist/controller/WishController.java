@@ -1,12 +1,16 @@
 package org.example.digital_wishlist.controller;
 
+import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.example.digital_wishlist.service.WishService;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -18,6 +22,62 @@ public class WishController {
 
     public WishController(WishService service) {
         this.service = service;
+    }
+
+    @GetMapping("/overview")
+    public String overview(Model model) {
+        List<Wishlist> wishlists = service.getAllWishLists();
+
+        model.addAttribute("wishlists", wishlists);
+
+        return "wishListSite";
+    }
+
+    @GetMapping("/{id}")
+    public String getWishlist(@PathVariable int id, Model model) {
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = service.getPresentsByWishId(id);
+
+        if(wishlist == null) {
+            return "redirect:/wishListSite";
+        }
+
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return "wishList";
+    }
+
+    // form for adding a new wish
+    @GetMapping("/create_wish")
+    public String showAddWishForm(Model model){
+        List<Wishlist> wishLists = service.getAllWishLists();
+
+        Present present = new Present();
+
+        model.addAttribute("wishlists", wishLists);
+        model.addAttribute("present", present);
+
+        return "create_wish";
+    }
+
+    // adding wish to wishlist
+    @PostMapping("/create_wish")
+    public String addWish(@ModelAttribute Present present){
+        service.addWish(present);
+
+        return "redirect:/wishListSite";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteWish(@PathVariable int id){
+        int deletedRows = service.deleteWish(id);
+
+        if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
+            return "redirect:/wishListSite";
+        }else{
+            return "redirect:/wisListSite";
+        }
+
     }
 
     @GetMapping("/create_user")
@@ -62,6 +122,8 @@ public class WishController {
             return "login";
         }
     }
+
+
     /*
     public createWishlist(){
         // code to createWishlist
