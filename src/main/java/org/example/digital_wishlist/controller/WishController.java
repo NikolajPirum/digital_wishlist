@@ -103,6 +103,7 @@ public class WishController {
         service.createUser(user);
         model.addAttribute("success", true);
         return "create_user";
+
     }
     @GetMapping("/login")
     public String login(Model model){
@@ -126,8 +127,21 @@ public class WishController {
             return "login";
         }
     }
+    @GetMapping("/create_wishlist")
+    public String showCreateWishListForm(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = service.findUser(username);
+        model.addAttribute("wishlist", new Wishlist());
+        return "create_wishlist";
+    }
+
+    @PostMapping("/create_wishlist")
+    public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
+        String username = principal.getName();
+        User user = service.findUser(username);
 
 
+        service.createWishlist(wishlistName, userId);
     @GetMapping("/create_wishlist")
     public String showCreateWishList(Model model, Principal principal) {
         String username = principal.getName();
@@ -136,6 +150,9 @@ public class WishController {
         return "create_wishlist";
     }
 
+        return "redirect:/wishListSite";
+    }
+    /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
         String username = principal.getName();
@@ -165,4 +182,5 @@ public class WishController {
     public deleteWishlist(){
         // code to deleteWishlist
     }
+     */
 }

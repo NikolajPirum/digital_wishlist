@@ -61,11 +61,11 @@ public class WishService {
     public User findUser(String username){
         return repository.findUser(username);
     }
-    /*
-    public createWishlist(){
-        // code to createWishlist
-    }
 
+    public void createWishlist(String wishlistName, int userId){
+        repository.createWishlist(wishlistName, userId);
+    }
+    /*
     public readUser(){
         // code to readUser
     }

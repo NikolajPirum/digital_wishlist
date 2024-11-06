@@ -1,6 +1,9 @@
 package org.example.digital_wishlist.repository;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -53,18 +56,24 @@ public class WishRepository {
         jdbcTemplate.update(query, present.getName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
     }
 
-    public void createWishlist(Wishlist wishlist){
+    public List<Wishlist> getAllWishLists(){
+        String query = "select * from wishlist";
+        return jdbcTemplate.query(query, wishlistRowMapper);
+    }
+
+    public void createWishlist( String wishlistName, int userId){
         // code to createWishlist
-        String query ="insert into wishlist(WishlistID, WishlistName, UserID) values (?, ?, ?)  ";
-        jdbcTemplate.update(query, wishlist.getWishlistID(),wishlist.getListName(),wishlist.getUserID());
+        String query = "INSERT INTO wishlist(listName, userID) VALUES (?, ?)";
+        jdbcTemplate.update(query, wishlistName, userId);
     }
 
     public readUser(){
         // code to readUser
     }
-
-    public readWishlist(){
+*//*
+    public List<Present> viewWishlists(int wishlistId){
         // code to readWishlist
+        String query = "select * from present where wishlistId = ?";
     }
 
     public updateWishlist(){
