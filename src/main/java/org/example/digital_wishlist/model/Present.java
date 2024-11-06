@@ -1,28 +1,46 @@
 package org.example.digital_wishlist.model;
 
 public class Present {
-    private static int id;
-    private static int price;
-    private static String link;
-    private static String name;
+    private String name;
+    private int id;
+    private int Price;
+    private String link;
+    private String brand;
+    private String Presentname;
     private Integer wishListId;
 
     public Present(int id, int price, String name) {
         this.id = id;
-        this.price = price;
-        this.name = name;
+        this.Price = price;
+        this.Presentname = name;
     }
 
     public Present(){
 
     }
 
-    public static String getLink() {
+    public String getPresentname() {
+        return Presentname;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setPresentname(String presentname) {
+        Presentname = presentname;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getLink() {
         return link;
     }
 
-    public static void setLink(String link) {
-        Present.link = link;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Integer getWishListId() {
@@ -33,7 +51,7 @@ public class Present {
         this.wishListId = wishListId;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
@@ -41,20 +59,20 @@ public class Present {
         this.id = id;
     }
 
-    public static int getPrice() {
-        return price;
+    public int getPrice() {
+        return Price;
     }
 
     public void setPrice(int price) {
-        this.price = price;
+        this.Price = price;
     }
 
-    public static String getName() {
-        return name;
+    public String getName() {
+        return Presentname;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Presentname = name;
     }
 
 }
