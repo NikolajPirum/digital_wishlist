@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.service.WishService;
@@ -39,63 +40,66 @@ public class WishController {
         model.addAttribute("success", true);
         return "create_user";
 
-    }
-    @GetMapping("/login")
-    public String login(Model model){
+    }@GetMapping("/login")
+    public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "login";
     }
+
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, Model model) throws InterruptedException {
-        User founduser = service.findUser(user.getUsername());
+    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) throws InterruptedException {
+        User foundUser = service.findUser(user.getUsername());
 
-            // Check for password match
-            if (founduser != null && founduser.getPassword().equals(user.getPassword())) {
-                return "index";
-            } else {
-                model.addAttribute("error", "Wrong Password or Username");
-                return "lo2gin";
-            }
+        // Check for password match
+        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            // Store user ID in session
+            session.setAttribute("userId", foundUser.getId());
 
-    }
-
-    @GetMapping("/wishlist/{userId}")
-    public String getWishlist(@PathVariable int userId, Model model) {
-        // Fetch all presents for the given user (or all presents if no user-specific filtering is needed)
-        List<Present> presents = service.getAllPresents();
-
-        // Add the presents list to the model
-        model.addAttribute("presents", presents);
-        model.addAttribute("userId", userId); // Pass the userId for later use in forms (if needed)
-
-        return "wishlist"; // Return the Thymeleaf template name
-    }
-    @PostMapping("/reserve")
-    public String reserve(@RequestParam int presentId, @RequestParam int userId, Model model) {
-        boolean success = service.reservePresent(presentId, userId);
-
-        if (success) {
-            model.addAttribute("message", "Present reserved successfully!");
+            // Redirect to the user's wishlist page or homepage after login
+            return "redirect:/overview"; // Adjust to the appropriate page
         } else {
-            model.addAttribute("error", "This present is already reserved.");
+            // Add an error message and reload the login page if credentials are incorrect
+            model.addAttribute("error", "Wrong Password or Username");
+            return "login";
         }
-
-        return "wishlist"; // Redirect back to the wishlist page
     }
 
-    // Cancel a reservation
-    @PostMapping("/cancel-reservation")
-    public String cancelReservation(@RequestParam int presentId, @RequestParam int userId, Model model) {
-        boolean success = service.cancelReservation(presentId, userId);
 
+    @GetMapping("/wishlist/{wishlistId}")
+    public String showWishlist(@PathVariable int wishlistId, Model model) {
+        List<Present> presents = service.getPresentsForWishlist(wishlistId);
+        model.addAttribute("presents", presents);
+        return "wishlist";
+    }
+
+    @PostMapping("/reserve")
+    public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) return "redirect:/login";
+
+        if (service.reservePresent(presentId, userId)) {
+            model.addAttribute("message", "Reserved successfully!");
+        } else {
+            model.addAttribute("message", "Already reserved.");
+        }
+        return "redirect:/wishlist/" + presentId;
+    }
+
+    @PostMapping("/cancel-reservation")
+    public String cancelReservation(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) return "redirect:/login";
+
+        boolean success = service.cancelReservation(presentId, userId);
         if (success) {
             model.addAttribute("message", "Reservation canceled successfully.");
         } else {
-            model.addAttribute("error", "Failed to cancel reservation.");
+            model.addAttribute("message", "Failed to cancel reservation.");
         }
-
-        return "wishlist"; // Redirect back to the wishlist page
+        return "redirect:/wishlist/" + presentId; // Redirect to the wishlist after cancellation
     }
+
+
     /*
     public createWishlist(){
         // code to createWishlist

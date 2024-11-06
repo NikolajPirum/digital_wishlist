@@ -38,28 +38,6 @@ public class WishRepository {
         jdbcTemplate.update(query, present.getId(), present.getName(), present.getPrice());
     }
 
-    /*
-    public createWishlist(){
-        // code to createWishlist
-    }
-
-    public readUser(){
-        // code to readUser
-    }
-
-    public readWishlist(){
-        // code to readWishlist
-    }
-
-    public updateWishlist(){
-        // code to updateWishlist
-    }
-
-    public deleteWishlist(){
-        // code to deleteWishlist
-    }
-    */
-
     public boolean findByUsername(String username) {
         String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
@@ -81,30 +59,32 @@ public class WishRepository {
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
     }
-    public boolean reservePresent(int presentId, int userId) {
-        String checkAvailabilityQuery = "SELECT COUNT(*) FROM Reserve WHERE PresentID = ? AND UserID != ?";
-        String reservePresentQuery = "INSERT INTO Reserve (PresentID, UserID) VALUES (?, ?)";
-
-        // Check if the present is already reserved
-        int count = jdbcTemplate.queryForObject(checkAvailabilityQuery, Integer.class, presentId, userId);
-
-        if (count > 0) {
-            // The present is already reserved by another user, cannot reserve it
-            return false;
-        }
-
-        // Otherwise, proceed to reserve the present
-        jdbcTemplate.update(reservePresentQuery, presentId, userId);
-        return true;
+    // Reserve a present if it's not already reserved by another user
+    public boolean usernameExists(String username) {
+        String sql = "SELECT COUNT(*) FROM AppUser WHERE Username = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
+        return count != null && count > 0;
     }
+
+    // Authenticate a user
+    public User authenticate(String username, String password) {
+        String sql = "SELECT * FROM AppUser WHERE Username = ? AND Password = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), username, password);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // No user found with this username/password
+        }
+    }
+
+
+    // Get presents in a wishlist
     public List<Present> getPresentsForWishlist(int wishlistId) {
         String query = "SELECT p.PresentID, p.Presentname, p.Brand, p.Price, p.Link, " +
-                "       CASE WHEN r.PresentID IS NOT NULL THEN 'Reserved' ELSE 'Available' END AS Status " +
+                "CASE WHEN r.PresentID IS NULL THEN 'Available' ELSE 'Reserved' END AS Status " +
                 "FROM Present p " +
                 "LEFT JOIN Reserve r ON p.PresentID = r.PresentID " +
                 "WHERE p.WishlistID = ?";
-
-        return jdbcTemplate.query(query, new Object[] { wishlistId }, (rs, rowNum) -> {
+        return jdbcTemplate.query(query, new Object[]{wishlistId}, (rs, rowNum) -> {
             Present present = new Present();
             present.setId(rs.getInt("PresentID"));
             present.setName(rs.getString("Presentname"));
@@ -116,35 +96,28 @@ public class WishRepository {
         });
     }
 
-    // Method to cancel a reservation
+
+
+
+    // Reserve a present
+    public boolean reservePresent(int presentId, int userId) {
+        String checkSql = "SELECT COUNT(*) FROM Reserve WHERE PresentID = ?";
+        int count = jdbcTemplate.queryForObject(checkSql, Integer.class, presentId);
+
+        if (count > 0) {
+            return false; // Already reserved
+        }
+
+        String reserveSql = "INSERT INTO Reserve (PresentID, UserID) VALUES (?, ?)";
+        jdbcTemplate.update(reserveSql, presentId, userId);
+        return true;
+    }
+
+    // Cancel a reservation
     public boolean cancelReservation(int presentId, int userId) {
         String query = "DELETE FROM Reserve WHERE PresentID = ? AND UserID = ?";
         int rowsAffected = jdbcTemplate.update(query, presentId, userId);
-        return rowsAffected > 0; // Returns true if the reservation was successfully canceled
+        return rowsAffected > 0; // Returns true if a reservation was canceled
     }
 
-    public List<Present> getAllPresents() {
-        String query = "SELECT p.PresentID, p.Presentname, p.Brand, p.Price, p.Link, " +
-                "       CASE WHEN r.PresentID IS NOT NULL THEN 'Reserved' ELSE 'Available' END AS Status " +
-                "FROM Present p " +
-                "LEFT JOIN Reserve r ON p.PresentID = r.PresentID";
-
-        // Fetch data from the database and return it as a list of Present objects
-        try {
-            return jdbcTemplate.query(query,(rs,rowNum) -> {
-                Present present = new Present();
-                present.setId(rs.getInt("PresentID"));
-                present.setName(rs.getString("Presentname"));
-                present.setBrand(rs.getString("Brand"));
-                present.setPrice(rs.getInt("Price"));
-                present.setLink(rs.getString("Link"));
-                present.setStatus(rs.getString("Status"));
-                return present;
-            });
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
 }

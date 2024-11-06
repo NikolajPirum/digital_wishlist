@@ -42,18 +42,29 @@ public class WishService {
         return repository.findUser(username);
     }
 
-    public boolean reservePresent(int presentId,int userId) {
+    public boolean registerUser(User user) {
+        if (repository.usernameExists(user.getUsername())) {
+            return false;
+        }
+        repository.createUser(user);
+        return true;
+    }
+
+    public User authenticate(String username, String password) {
+        return repository.authenticate(username, password);
+    }
+
+    public List<Present> getPresentsForWishlist(int wishlistId) {
+        return repository.getPresentsForWishlist(wishlistId);
+    }
+
+    public boolean reservePresent(int presentId, int userId) {
         return repository.reservePresent(presentId, userId);
     }
 
-    public boolean cancelReservation(int presentId,int userId) {
+    public boolean cancelReservation(int presentId, int userId) {
         return repository.cancelReservation(presentId, userId);
     }
-
-    public List<Present> getAllPresents() {
-        return repository.getAllPresents();
-    }
-
     /*
     public createWishlist(){
         // code to createWishlist
