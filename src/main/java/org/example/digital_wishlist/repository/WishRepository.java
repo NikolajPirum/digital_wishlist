@@ -27,9 +27,9 @@ public class WishRepository {
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
     private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
-            rs.getInt("id"),
-            rs.getInt("price"),
-            rs.getString("name")
+            rs.getInt("PresentID"),
+            rs.getInt("Price"),
+            rs.getString("Presentname")
     );
 
     public void createUser(User user1){
@@ -43,7 +43,7 @@ public class WishRepository {
     }
 
     public int deleteWish(int id){
-        String query = "delete from Present where id = ?";
+        String query = "delete from Present where PresentID = ?";
         return jdbcTemplate.update(query, id);
     }
 
@@ -54,13 +54,13 @@ public class WishRepository {
     }
 
     public List<Present> getPresentsByWishListId(int wishListId){
-        String query = "select * from Present where wishlistId = ?";
+        String query = "select * from Present where WishlistID = ?";
         return jdbcTemplate.query(query, presentRowMapper, wishListId);
 
     }
 
     public Wishlist getWishlist(int id){
-        String query = "select * from WishList where id = ?";
+        String query = "select * from WishList where WishlistID = ?";
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 

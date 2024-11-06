@@ -77,9 +77,9 @@ public class WishController {
         int deletedRows = service.deleteWish(id);
 
         if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
-            return "redirect:/wishListSite";
+            return "wishListSite";
         }else{
-            return "redirect:/wisListSite";
+            return "redirect:/wisList";
         }
 
     }

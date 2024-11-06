@@ -13,7 +13,7 @@
 
 <ul>
     <li th:each="wishlist : ${wishlists}">
-        <span th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></span>
+        <a th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></a>
 
         <form th:action="@{'/' + ${wishlist.listName} + '/delete'}" method="POST">
             <input type="submit" value="Delete wishlist">
