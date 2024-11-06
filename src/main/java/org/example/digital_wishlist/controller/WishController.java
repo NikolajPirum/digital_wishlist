@@ -49,14 +49,16 @@ public class WishController {
     public String login(@ModelAttribute("user") User user, Model model) throws InterruptedException {
         User founduser = service.findUser(user.getUsername());
 
-        if(founduser != null
-             && founduser.getUsername().equals(user.getUsername())
-             && founduser.getPassword().equals(user.getPassword())){
-
+        if (founduser != null) {
+            // Check for password match
+            if (founduser.getPassword() != null && founduser.getPassword().equals(user.getPassword())) {
                 return "index";
-        }
-        else {
-            model.addAttribute("error","Wrong Password or Username");
+            } else {
+                model.addAttribute("error", "Wrong Password or Username");
+                return "login";
+            }
+        } else {
+            model.addAttribute("error", "Wrong Password or Username");
             return "login";
         }
     }

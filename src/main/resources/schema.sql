@@ -1,26 +1,25 @@
-CREATE DATABASE IF NOT EXISTS WishlistDB;
+--CREATE DATABASE WishListDB IF NOT EXIST;
+-- Use the database
 
-USE WishlistDB;
-
--- Create User table
-CREATE TABLE User (
-                      UserID INTEGER NOT NULL AUTO_INCREMENT,
-                      Name VARCHAR(15),
-                      Username VARCHAR(20) UNIQUE,
-                      Password VARCHAR(50),
-                      Email VARCHAR(50),
-                      WishlistID INTEGER,
-                      PRIMARY KEY(UserID)
+-- Create AppUser table
+CREATE TABLE AppUser (
+                         UserID INTEGER NOT NULL AUTO_INCREMENT,
+                         Name VARCHAR(50),
+                         Username VARCHAR(30),
+                         Password VARCHAR(30),
+                         Email VARCHAR(50),
+                         WishlistID INTEGER,  -- This column will hold foreign key
+                         PRIMARY KEY(UserID)
 );
 
 -- Create Present table
 CREATE TABLE Present (
                          PresentID INTEGER NOT NULL AUTO_INCREMENT,
-                         Presentname VARCHAR(60),
+                         Presentname VARCHAR(30),
                          Brand VARCHAR(30),
-                         Price DOUBLE,
-                         WishlistID INTEGER,
-                         Link VARCHAR(50),
+                         Price DECIMAL(10,2),
+                         WishlistID INTEGER,  -- This column will hold foreign key
+                         Link VARCHAR(255),
                          PRIMARY KEY(PresentID)
 );
 
@@ -29,7 +28,8 @@ CREATE TABLE WishList (
                           WishlistID INTEGER NOT NULL AUTO_INCREMENT,
                           Wishlistname VARCHAR(30),
                           UserID INTEGER,
-                          PRIMARY KEY(WishlistID)
+                          PRIMARY KEY(WishlistID),
+                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
 -- Create Reserve table
@@ -37,21 +37,31 @@ CREATE TABLE Reserve (
                          ReserveID INTEGER NOT NULL AUTO_INCREMENT,
                          PresentID INTEGER,
                          UserID INTEGER,
-                         PRIMARY KEY(ReserveID)
+                         PRIMARY KEY(ReserveID),
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
+                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
--- Add foreign key constraints with consistent casing
-ALTER TABLE WishList
-    ADD CONSTRAINT FK_Wishlist_UserID FOREIGN KEY (UserID) REFERENCES User(UserID);
+-- Insert data into AppUser table
+INSERT INTO AppUser (Name, Username, Password, Email)
+VALUES ('Alice', 'alice01', 'pass1234', 'alice@example.com'),
+       ('Bob', 'bob_the_builder', 'bobpass', 'bob@example.com'),
+       ('Charlie', 'charlie123', 'charliepass', 'charlie@example.com');
 
-ALTER TABLE User
-    ADD CONSTRAINT FK_User_WishlistID FOREIGN KEY (WishlistID) REFERENCES WishList(WishlistID);
+-- Insert data into WishList table
+INSERT INTO WishList (Wishlistname, UserID)
+VALUES ('Alices Birthday Wishlist', 1),
+       ('Bobs Christmas Wishlist', 2),
+       ('Charlies Wedding Wishlist', 3);
 
-ALTER TABLE Present
-    ADD CONSTRAINT FK_Present_WishlistID FOREIGN KEY (WishlistID) REFERENCES WishList(WishlistID);
+-- Insert data into Present table
+INSERT INTO Present (Presentname, Brand, Price, WishlistID, Link)
+VALUES ('Wireless Headphones', 'Sony', 150.00, 1, 'https://example.com/sony-headphones'),
+       ('Toolset', 'Bosch', 80.00, 2, 'https://example.com/bosch-toolset'),
+       ('Coffee Maker', 'Nespresso', 120.00, 3, 'https://example.com/nespresso-coffee-maker');
 
-ALTER TABLE Reserve
-    ADD CONSTRAINT FK_Reserve_PresentID FOREIGN KEY (PresentID) REFERENCES Present(PresentID);
-
-ALTER TABLE Reserve
-    ADD CONSTRAINT FK_Reserve_UserID FOREIGN KEY (UserID) REFERENCES User(UserID);
+-- Insert data into Reserve table
+INSERT INTO Reserve (PresentID, UserID)
+VALUES (1, 2),
+       (2, 1),
+       (3, 1);

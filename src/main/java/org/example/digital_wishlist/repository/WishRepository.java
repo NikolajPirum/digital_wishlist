@@ -16,12 +16,12 @@ public class WishRepository {
     }
 
     public void createUser(User user1){
-        String query = "insert into User (name, email, username, password) values (?, ?, ?, ?)";
+        String query = "insert into AppUser (name, email, username, password) values (?, ?, ?, ?)";
         jdbcTemplate.update(query, user1.getName(), user1.getEmail(), user1.getUsername(), user1.getPassword());
     }
 
     public void deleteUser(int id){
-        String query = "delete from user where id = ?";
+        String query = "delete from Appuser where id = ?";
         jdbcTemplate.update(query, id);
     }
 
@@ -58,13 +58,13 @@ public class WishRepository {
     */
 
     public boolean findByUsername(String username) {
-        String query = "SELECT COUNT(*) FROM User WHERE username = ?";
+        String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
         return count != null && count > 0;
     }
 
     public User findUser(String username) {
-        String query = "SELECT * FROM User WHERE username = ?";
+        String query = "SELECT * FROM AppUser WHERE username = ?";
         try {
             return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), username);
         } catch (EmptyResultDataAccessException e) {
@@ -74,7 +74,7 @@ public class WishRepository {
 
     // Using JdbcTemplate to check if email exists
     public boolean findUserByEmail(String email) {
-        String query = "SELECT COUNT(*) FROM User WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM AppUser WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
     }
