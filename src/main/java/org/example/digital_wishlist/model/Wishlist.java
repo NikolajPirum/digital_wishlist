@@ -15,8 +15,8 @@ public class Wishlist {
         this.reserv = isReserv;
     }
 
-    public Wishlist(int id, String listName){
-        this.id = id;
+    public Wishlist(int wishlistID, String listName){
+        this.wishlistID = wishlistID;
         this.listName = listName;
     }
 
@@ -56,14 +56,6 @@ public class Wishlist {
 
     public void setReserv(boolean reserv) {
         this.reserv = reserv;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getUserID() { return userId; }
