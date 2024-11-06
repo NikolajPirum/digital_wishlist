@@ -68,19 +68,22 @@ public class WishRepository {
         String query = "select * from wishlist";
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
-    /*
-    public createWishlist(){
-        // code to createWishlist
-    }
 
+    public void createWishlist( String wishlistName, int userId){
+        // code to createWishlist
+        String query = "INSERT INTO wishlist(listName, userID) VALUES (?, ?)";
+        jdbcTemplate.update(query, wishlistName, userId);
+    }
+    /*
     public readUser(){
         // code to readUser
     }
-
-    public readWishlist(){
+*//*
+    public List<Present> viewWishlists(int wishlistId){
         // code to readWishlist
+        String query = "select * from present where wishlistId = ?";
     }
-
+/*
     public updateWishlist(){
         // code to updateWishlist
     }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/CSS/create_wishlist.css}">
+
+</head>
+<body>
+    <form action="/create_wishlist" methoid="post">
+        <label for="wishlistName">Wishlist Name</label>
+
+        <input type="text" id="wishlistName" name="wishlistName" required>
+
+        <input typ="hiden" name="userId" value="${user.id}">
+
+        <button type="submit">Create Wishlist</button>
+
+
+    </form>
+</body>
+</html>
