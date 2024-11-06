@@ -19,9 +19,13 @@ public class WishController {
 
     private final WishService service;
 
-
     public WishController(WishService service) {
         this.service = service;
+    }
+
+    @GetMapping("/favicon.ico")
+    public void favicon() {
+        // Do nothing or log the request if needed
     }
 
     @GetMapping("/overview")
@@ -65,7 +69,7 @@ public class WishController {
     public String addWish(@ModelAttribute Present present){
         service.addWish(present);
 
-        return "redirect:/wishListSite";
+        return "wishListSite";
     }
 
     @PostMapping("/{id}/delete")
@@ -73,9 +77,9 @@ public class WishController {
         int deletedRows = service.deleteWish(id);
 
         if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
-            return "redirect:/wishListSite";
+            return "wishListSite";
         }else{
-            return "redirect:/wisListSite";
+            return "redirect:/wisList";
         }
 
     }
