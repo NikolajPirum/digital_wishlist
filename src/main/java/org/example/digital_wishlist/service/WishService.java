@@ -5,6 +5,8 @@ import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.repository.WishRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WishService {
 
@@ -39,6 +41,19 @@ public class WishService {
     public User findUser(String username){
         return repository.findUser(username);
     }
+
+    public boolean reservePresent(int presentId,int userId) {
+        return repository.reservePresent(presentId, userId);
+    }
+
+    public boolean cancelReservation(int presentId,int userId) {
+        return repository.cancelReservation(presentId, userId);
+    }
+
+    public List<Present> getAllPresents() {
+        return repository.getAllPresents();
+    }
+
     /*
     public createWishlist(){
         // code to createWishlist

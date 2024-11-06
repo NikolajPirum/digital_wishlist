@@ -1,13 +1,13 @@
 package org.example.digital_wishlist.controller;
 
+import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 
 @Controller
@@ -49,18 +49,52 @@ public class WishController {
     public String login(@ModelAttribute("user") User user, Model model) throws InterruptedException {
         User founduser = service.findUser(user.getUsername());
 
-        if (founduser != null) {
             // Check for password match
-            if (founduser.getPassword() != null && founduser.getPassword().equals(user.getPassword())) {
+            if (founduser != null && founduser.getPassword().equals(user.getPassword())) {
                 return "index";
             } else {
                 model.addAttribute("error", "Wrong Password or Username");
-                return "login";
+                return "lo2gin";
             }
+
+    }
+
+    @GetMapping("/wishlist/{userId}")
+    public String getWishlist(@PathVariable int userId, Model model) {
+        // Fetch all presents for the given user (or all presents if no user-specific filtering is needed)
+        List<Present> presents = service.getAllPresents();
+
+        // Add the presents list to the model
+        model.addAttribute("presents", presents);
+        model.addAttribute("userId", userId); // Pass the userId for later use in forms (if needed)
+
+        return "wishlist"; // Return the Thymeleaf template name
+    }
+    @PostMapping("/reserve")
+    public String reserve(@RequestParam int presentId, @RequestParam int userId, Model model) {
+        boolean success = service.reservePresent(presentId, userId);
+
+        if (success) {
+            model.addAttribute("message", "Present reserved successfully!");
         } else {
-            model.addAttribute("error", "Wrong Password or Username");
-            return "login";
+            model.addAttribute("error", "This present is already reserved.");
         }
+
+        return "wishlist"; // Redirect back to the wishlist page
+    }
+
+    // Cancel a reservation
+    @PostMapping("/cancel-reservation")
+    public String cancelReservation(@RequestParam int presentId, @RequestParam int userId, Model model) {
+        boolean success = service.cancelReservation(presentId, userId);
+
+        if (success) {
+            model.addAttribute("message", "Reservation canceled successfully.");
+        } else {
+            model.addAttribute("error", "Failed to cancel reservation.");
+        }
+
+        return "wishlist"; // Redirect back to the wishlist page
     }
     /*
     public createWishlist(){

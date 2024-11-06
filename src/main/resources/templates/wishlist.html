@@ -1,0 +1,34 @@
+<table>
+  <tr>
+    <th>Present Name</th>
+    <th>Brand</th>
+    <th>Price</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+
+    <tr th:each="present : ${presents}">
+      <td th:text="${present.presentname}">Present Name</td>
+      <td th:text="${present.brand}">Brand</td>
+      <td th:text="${present.price}">Price</td>
+      <td th:text="${present.link}">Link</td>
+      <td th:text="${present.status}">Status</td>
+      <td>
+        <div th:if="${present.status == 'Available'}">
+          <form th:action="@{/reserve}" method="post">
+            <input type="hidden" name="presentId" th:value="${present.presentID}">
+            <input type="hidden" name="userId" th:value="${userId}">
+            <button type="submit">Reserve</button>
+          </form>
+        </div>
+        <div th:if="${present.status == 'Reserved'}">
+          <form th:action="@{/cancel-reservation}" method="post">
+            <input type="hidden" name="presentId" th:value="${present.presentID}">
+            <input type="hidden" name="userId" th:value="${userId}">
+            <button type="submit">Cancel Reservation</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+</table>
+
