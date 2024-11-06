@@ -2,10 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Create User</title>
+    <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
 </head>
 <body>
-<h2>Create a New User</h2>
 <form th:action="@{/create_user}" th:object="${user}" method="post">
+    <h2>Create a New User</h2>
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" th:field="*{name}" required />
@@ -23,6 +24,7 @@
         <input type="password" id="password" th:field="*{password}" required />
     </div>
     <button type="submit">Create User</button>
+    <a th:href="@{/login}" class="btn btn-primary">Login</a>
     <p th:if="${success}" style="color:green">User created successfully!</p>
     <p th:if="${error}" style="color:red">Error: Username or email already exists.</p>
 </form>
