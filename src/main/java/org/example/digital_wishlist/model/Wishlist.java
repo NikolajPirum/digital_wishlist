@@ -3,7 +3,8 @@ package org.example.digital_wishlist.model;
 import java.util.ArrayList;
 
 public class Wishlist {
-    private String listName;
+    private int WishlistID;
+    private String Wishlistname;
     private ArrayList<Present> PresentList = new ArrayList<>();
     private boolean reserv = false;
     private int wishlistId;
@@ -11,9 +12,14 @@ public class Wishlist {
 
 
     public Wishlist(String listName, ArrayList<Present> PresentList, boolean isReserv) {
-        this.listName = listName;
+        this.Wishlistname = listName;
         this.PresentList = PresentList;
         this.reserv = isReserv;
+    }
+
+    public Wishlist(int id, String listName){
+        this.WishlistID = id;
+        this.Wishlistname = listName;
     }
 
     public Wishlist(){
@@ -25,12 +31,16 @@ public class Wishlist {
         this.userName = userName;
     }
 
+    public int getId() {
+        return WishlistID;
+    }
+
     public String getListName() {
-        return listName;
+        return Wishlistname;
     }
 
     public void setListName(String listName) {
-        this.listName = listName;
+        this.Wishlistname = listName;
     }
 
     public ArrayList<Present> getPresentList() {
