@@ -103,20 +103,24 @@ public class WishRepository {
     }
 
     public boolean reservePresent(int presentId, int userId) {
-        // Check if the reservation already exists
-        String checkSql = "SELECT COUNT(*) FROM reservation WHERE present_id = ? AND user_id = ?";
-        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, presentId, userId);
+        try {
+            String checkSql = "SELECT COUNT(*) FROM reservation WHERE present_id = ? AND user_id = ?";
+            Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, presentId, userId);
 
-        if (count != null && count > 0) {
-            // Reservation already exists, return false
+            if (count != null && count > 0) {
+                return false;  // Reservation already exists
+            }
+
+            String sql = "INSERT INTO reservation (present_id, user_id) VALUES (?, ?)";
+            int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();  // Print stack trace or use a logger
             return false;
         }
-
-        // Insert a new reservation
-        String sql = "INSERT INTO reservation (present_id, user_id) VALUES (?, ?)";
-        int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
-        return rowsAffected > 0;  // Return true if the reservation was successfully made
     }
+
 
     public boolean cancelReservation(int presentId, int userId) {
         String sql = "DELETE FROM reservation WHERE present_id = ? AND user_id = ?";

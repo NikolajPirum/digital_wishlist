@@ -125,27 +125,26 @@ public class WishController {
 
 
     @PostMapping("/reserve")
-    public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
+    public String reservePresent(@RequestParam("wishId") int wishId, HttpSession session, Model model) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) return "redirect:/login";
-
-        if (service.reservePresent(presentId, userId)) {
-            model.addAttribute("message", true);
-            model.addAttribute("messageText", "Reserve");
-        } else {
-            model.addAttribute("message", false);
-            model.addAttribute("messageText", "Reserved");
-            return "redirect:/overview";
+        if (userId == null) {
+            return "redirect:/login";
         }
-        return "redirect:/wishList";
+        User user = service.findUserById(userId);
+        boolean isReserved = service.reservePresent(wishId, userId);
+        model.addAttribute("message", isReserved);
+        model.addAttribute("messageText", isReserved ? "Reserved successfully" : "Already reserved");
+
+        return "redirect:/overview"; // Ensure that this page has logic to display the message
     }
 
+
     @PostMapping("/cancel-reservation")
-    public String cancelReservation(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
+    public String cancelReservation(@RequestParam("wishId") int wishId, HttpSession session, Model model) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) return "redirect:/login";
 
-        boolean success = service.cancelReservation(presentId, userId);
+        boolean success = service.cancelReservation(wishId, userId);
         if (success) {
             model.addAttribute("message", "Reservation canceled successfully.");
         } else {

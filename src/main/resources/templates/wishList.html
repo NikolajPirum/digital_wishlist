@@ -41,20 +41,16 @@
 
         </td>
         <td>
-            <div>
-                <form th:action="@{/reserve}" method="post">
-                    <input type="hidden" name="presentId" th:value="${wish.id}">
-                    <button type="submit">Reserve</button>
-                </form>
-            </div>
-            </td>
+            <form th:action="@{/reserve}" method="post">
+                <input type="hidden" name="wishId" th:value="${wish.id}">
+                <button type="submit">Reserve</button>
+            </form>
+        </td>
         <td>
-            <div>
-                <form th:action="@{/cancel-reservation}" method="post">
-                    <input type="hidden" name="presentId" th:value="${wish.id}">
-                    <button type="submit">Cancel Reservation</button>
-                </form>
-            </div>
+            <form th:action="@{/cancel-reservation}" method="post">
+                <input type="hidden" name="wishId" th:value="${wish.id}">
+                <button type="submit">Cancel Reservation</button>
+            </form>
         </td>
 
     </tr>
