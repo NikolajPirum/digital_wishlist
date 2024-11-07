@@ -61,7 +61,7 @@ public class Present {
     }
 
     public int getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(int price) {

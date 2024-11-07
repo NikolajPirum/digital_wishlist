@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>WishList Site</title>
+</head>
+<body>
+
+<header>
+    <h1>Wishlists Overview </h1>
+
+    <h3>Here is an overview of your different wishlists</h3>
+</header>
+
+<ul>
+    <li th:each="wishlist : ${wishlists}">
+        <a th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></a>
+
+        <form th:action="@{'/' + ${wishlist.listName} + '/delete'}" method="POST">
+            <input type="submit" value="Delete wishlist">
+        </form>
+
+        <form th:action="@{'/' + ${wishlist.listName} + '/update'}" method="POST">
+            <input type="submit" value="Update wishlist">
+        </form>
+
+    </li>
+
+</ul>
+
+</body>
+</html>

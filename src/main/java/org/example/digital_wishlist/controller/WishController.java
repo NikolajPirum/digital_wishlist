@@ -1,18 +1,15 @@
 package org.example.digital_wishlist.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
-import org.example.digital_wishlist.model.Wishlist;
 import org.example.digital_wishlist.service.WishService;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @Controller("/")
@@ -129,39 +126,21 @@ public class WishController {
     }
 
 
-    @GetMapping("/wishlist/{wishlistId}")
-    public String showWishlist(@PathVariable int wishlistId, Model model) {
-        List<Present> presents = service.getPresentsForWishlist(wishlistId);
-        model.addAttribute("presents", presents);
-        return "wishlist";
-    }
-
     @PostMapping("/reserve")
     public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) return "redirect:/login";
 
         if (service.reservePresent(presentId, userId)) {
-            model.addAttribute("message", "Reserved successfully!");
+            model.addAttribute("message", true);
+            model.addAttribute("messageText", "Reserve");
         } else {
             model.addAttribute("error", "Wrong Password or Username");
+            model.addAttribute("messageText", "Reserved");
             return "login";
         }
         return "redirect:/wishlist/" + presentId;
     }
-    @GetMapping("/create_wishlist")
-    public String createWishList(Model model, HttpSession session) {
-        model.addAttribute("wishlist", new Wishlist());
-        return "create_wishlist";
-    }
-
-    @PostMapping("/create_wishlist")
-    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
-        service.createWishlist(wishlist);
-        model.addAttribute("success", true);
-        return "redirect:/overview";
-    }
-
 
     @PostMapping("/cancel-reservation")
     public String cancelReservation(@RequestParam("presentId") int presentId, HttpSession session, Model model) {
@@ -177,7 +156,18 @@ public class WishController {
         return "redirect:/wishlist/" + presentId; // Redirect to the wishlist after cancellation
     }
 
-
+    /*@GetMapping("/create_wishlist")
+    public String createWishList(Model model, HttpSession session) {
+        model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
+        return "create_wishlist";
+    }
+ */
+    @PostMapping("/create_wishlist")
+    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
+        service.createWishlist(wishlist);
+        model.addAttribute("success", true);
+        return "redirect:/overview";
+    }
     /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
