@@ -78,8 +78,6 @@ public class WishRepository {
         String query = "select * from wishlist where WishlistID = ?";
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
-
-
 /*
     public readUser(){
         // code to readUser

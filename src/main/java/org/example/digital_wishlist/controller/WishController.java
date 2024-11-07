@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 public class WishController {
 
     private final WishService service;
-
 
     public WishController(WishService service) {
         this.service = service;
