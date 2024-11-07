@@ -27,7 +27,6 @@ public class User {
     public User(){
 
     }
-
     public int getId() {return id;}
 
     public void setId(int id) {id = id;}

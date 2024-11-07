@@ -6,9 +6,10 @@
     <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
 </head>
 <body>
-    <h2> Login page</h2>
+
 
     <form th:action="@{/login}" method = "post" th:object="${user}">
+        <h2> Login page</h2>
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" th:field="*{username}" required />

@@ -32,7 +32,9 @@ public class WishService {
     }
 
     public Wishlist getWishList(int id){
-        return repository.getWishList(id);
+
+        return repository.getWishlist(id);
+
     }
 
     public List<Present> getPresentsByWishId(int id){
@@ -46,35 +48,36 @@ public class WishService {
     public int deleteWish(int id){
         return repository.deleteWish(id);
     }
+
     public boolean findByUsername(String username){
         return repository.findByUsername(username);
     }
+
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
+
     public User findUser(String username){
         return repository.findUser(username);
     }
+
     public User findUserById(int id){
+
         return repository.findUserById(id);
     }
+
     public void createWishlist(Wishlist wishlist){
         repository.createWishlist(wishlist);
     }
-    /*
-    public readUser(){
-        // code to readUser
+
+
+
+    public boolean reservePresent(int presentId, int userId) {
+        return repository.reservePresent(presentId, userId);
     }
 
-    public readWishlist(){
-        // code to readWishlist
+    public boolean cancelReservation(int presentId, int userId) {
+        return repository.cancelReservation(presentId, userId);
     }
 
-    public updateWishlist(){
-        // code to updateWishlist
-    }
-
-    public deleteWishlist(){
-        // code to deleteWishlist
-    }*/
 }

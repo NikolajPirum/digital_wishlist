@@ -8,10 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -23,14 +19,13 @@ public class WishRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // rowMapper til at skabe wishList objekter ud af ResultSets
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistID"),
             rs.getString("Wishlistname")
     );
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
-    private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
+    private final RowMapper<Present> presentRowMapper = (rs,rowNum) -> new Present(
             rs.getInt("PresentID"),
             rs.getInt("Price"),
             rs.getString("Presentname"),
@@ -69,6 +64,7 @@ public class WishRepository {
         jdbcTemplate.update(query, wishlist.getListName());
     }
 
+
     public List<Present> getPresentsByWishlistId(int id){
         String query = "select * from present where WishlistID = ?";
         return jdbcTemplate.query(query, presentRowMapper, id);
@@ -78,23 +74,18 @@ public class WishRepository {
         String query = "select * from wishlist where WishlistID = ?";
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
-/*
-    public readUser(){
-        // code to readUser
+
+
+    public List<Present> getPresentsByWishListId(int id){
+        String query = "select * from present where WishlistID = ?";
+        return jdbcTemplate.query(query, presentRowMapper, id);
     }
 
-    public readWishlist(){
-        // code to readWishlist
+    public Wishlist getWishlist(int id){
+        String query = "select * from wishlist where WishlistID = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 
-    public updateWishlist(){
-        // code to updateWishlist
-    }
-
-    public deleteWishlist(){
-        // code to deleteWishlist
-    }
-    */
 
     public boolean findByUsername(String username) {
         String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";
@@ -117,12 +108,36 @@ public class WishRepository {
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
     }
+
+    public boolean reservePresent(int presentId, int userId) {
+        // Check if the reservation already exists
+        String checkSql = "SELECT COUNT(*) FROM reservation WHERE present_id = ? AND user_id = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, presentId, userId);
+
+        if (count != null && count > 0) {
+            // Reservation already exists, return false
+            return false;
+        }
+
+        // Insert a new reservation
+        String sql = "INSERT INTO reservation (present_id, user_id) VALUES (?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
+        return rowsAffected > 0;  // Return true if the reservation was successfully made
+    }
+
+    public boolean cancelReservation(int presentId, int userId) {
+        String sql = "DELETE FROM reservation WHERE present_id = ? AND user_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
+        return rowsAffected > 0;  // Return true if the reservation was canceled
+    }
+
     public User findUserById(int id) {
         String query = "SELECT * FROM AppUser WHERE id = ?";
         try {
-            return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), id);
+            return jdbcTemplate.queryForObject(query,new BeanPropertyRowMapper<>(User.class),id);
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
-    }
-}
+
+
+    }}
