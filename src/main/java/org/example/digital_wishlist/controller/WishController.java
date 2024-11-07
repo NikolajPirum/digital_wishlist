@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -142,15 +143,8 @@ public class WishController {
 
 
         service.createWishlist(wishlistName, userId);
-    @GetMapping("/create_wishlist")
-    public String showCreateWishList(Model model, Principal principal) {
-        String username = principal.getName();
-        User user = service.findUser(username);
-        model.addAttribute("wishlist", new Wishlist());
-        return "create_wishlist";
-    }
-
-        return "redirect:/wishListSite";
+        model.addAttribute("success", true);
+        return "wishlistSite";
     }
     /*
     @PostMapping("/create_wishlist")
@@ -163,6 +157,7 @@ public class WishController {
 
         return "redirect:/wishListSite";
     }
+    /*
     public readUser(){
         // code to readUser
     }
