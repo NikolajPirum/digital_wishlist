@@ -32,11 +32,13 @@ public class WishService {
     }
 
     public Wishlist getWishList(int id){
+
         return repository.getWishlist(id);
+
     }
 
     public List<Present> getPresentsByWishId(int id){
-        return repository.getPresentsByWishListId(id);
+        return repository.getPresentsByWishlistId(id);
     }
 
     public void addWish(Present present){
