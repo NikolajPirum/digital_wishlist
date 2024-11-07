@@ -2,10 +2,9 @@ package org.example.digital_wishlist.service;
 
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
+import org.example.digital_wishlist.model.Wishlist;
 import org.example.digital_wishlist.repository.WishRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class WishService {
@@ -25,12 +24,25 @@ public class WishService {
         repository.deleteUser(id);
     }
 
+
+    public List<Wishlist> getAllWishLists(){
+        return repository.getAllWishLists();
+    }
+
+    /*public Wishlist getWishList(int id){
+        repository.getWishlist(id);
+    }
+
+    public List<Present> getPresentsByWishId(int id){
+        return repository.getPresentsByWishListId(id);
+    }
+*/
     public void addWish(Present present){
         repository.addWish(present);
     }
 
-    public void deleteWish(int id){
-        repository.deleteWish(id);
+    public int deleteWish(int id){
+        return repository.deleteWish(id);
     }
     public boolean findByUsername(String username){
         return repository.findByUsername(username);
@@ -40,6 +52,12 @@ public class WishService {
     }
     public User findUser(String username){
         return repository.findUser(username);
+    }
+    public User findUserById(int id){
+        return repository.findUserById(id);
+    }
+    public void createWishlist(Wishlist wishlist){
+        repository.createWishlist(wishlist);
     }
 
     public boolean registerUser(User user) {
