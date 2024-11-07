@@ -31,14 +31,14 @@ public class WishService {
         return repository.getAllWishLists();
     }
 
-    public Wishlist getWishList(int id){
+    /*public Wishlist getWishList(int id){
         repository.getWishlist(id);
     }
 
     public List<Present> getPresentsByWishId(int id){
         return repository.getPresentsByWishListId(id);
     }
-
+*/
     public void addWish(Present present){
         repository.addWish(present);
     }

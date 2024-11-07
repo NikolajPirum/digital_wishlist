@@ -67,7 +67,7 @@ public class WishRepository {
         String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
         jdbcTemplate.update(query, wishlist.getListName());
     }
-
+/*
     public readUser(){
         // code to readUser
     }
