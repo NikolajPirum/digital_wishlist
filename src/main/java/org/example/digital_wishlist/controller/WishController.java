@@ -133,11 +133,11 @@ public class WishController {
             model.addAttribute("message", true);
             model.addAttribute("messageText", "Reserve");
         } else {
-            model.addAttribute("error", "Wrong Password or Username");
+            model.addAttribute("message", false);
             model.addAttribute("messageText", "Reserved");
-            return "login";
+            return "redirect:/overview";
         }
-        return "redirect:/wishlist/" + presentId;
+        return "redirect:/wishList";
     }
 
     @PostMapping("/cancel-reservation")
@@ -151,7 +151,7 @@ public class WishController {
         } else {
             model.addAttribute("message", "Failed to cancel reservation.");
         }
-        return "redirect:/wishlist/" + presentId; // Redirect to the wishlist after cancellation
+        return "redirect:/wishList"; // Redirect to the wishlist after cancellation
     }
 
     /*@GetMapping("/create_wishlist")

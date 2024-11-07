@@ -38,6 +38,23 @@
         <form th:action="@{'/' + ${wishlist.id} + '/delete'}" method="POST">
             <input type="submit" value="Delete wish">
         </form>
+
+        </td>
+        <td>
+            <div>
+                <form th:action="@{/reserve}" method="post">
+                    <input type="hidden" name="presentId" th:value="${wish.id}">
+                    <button type="submit">Reserve</button>
+                </form>
+            </div>
+            </td>
+        <td>
+            <div>
+                <form th:action="@{/cancel-reservation}" method="post">
+                    <input type="hidden" name="presentId" th:value="${wish.id}">
+                    <button type="submit">Cancel Reservation</button>
+                </form>
+            </div>
         </td>
 
     </tr>
