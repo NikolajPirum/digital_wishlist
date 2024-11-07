@@ -90,13 +90,19 @@ public class WishRepository {
     }
 
     public User findUser(String username) {
-        String query = "SELECT * FROM AppUser WHERE username = ?";
-        try {
-            return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), username);
-        } catch (EmptyResultDataAccessException e) {
-            return null; // or handle according to your application's needs
-        }
+        String query = "SELECT * FROM AppUser WHERE Username = ?";
+        return jdbcTemplate.queryForObject(query, (rs, rowNum) -> {
+            User user = new User();
+            user.setId(rs.getInt("UserID")); // Map UserID column to userId field
+            user.setName(rs.getString("Name"));
+            user.setEmail(rs.getString("Email"));
+            user.setPassword(rs.getString("Password"));
+            user.setUsername(rs.getString("Username"));
+            return user;
+        }, username);
     }
+
+
 
     // Using JdbcTemplate to check if email exists
     public boolean findUserByEmail(String email) {
