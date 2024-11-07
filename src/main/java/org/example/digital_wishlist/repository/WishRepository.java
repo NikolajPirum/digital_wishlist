@@ -68,6 +68,18 @@ public class WishRepository {
         String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
         jdbcTemplate.update(query, wishlist.getListName());
     }
+
+    public List<Present> getPresentsByWishlistId(int id){
+        String query = "select * from present where WishlistID = ?";
+        return jdbcTemplate.query(query, presentRowMapper, id);
+    }
+
+    public Wishlist getWishList(int id){
+        String query = "select * from wishlist where WishlistID = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+    }
+
+
 /*
     public readUser(){
         // code to readUser

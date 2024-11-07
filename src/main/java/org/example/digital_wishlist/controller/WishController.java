@@ -38,7 +38,7 @@ public class WishController {
 
         return "wishListSite";
     }
-/*
+
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         Wishlist wishlist = service.getWishList(id);
@@ -52,7 +52,7 @@ public class WishController {
         model.addAttribute("presents", presents);
         return "wishList";
     }
-*/
+
     // form for adding a new wish
     @GetMapping("create_wish")
     public String showAddWishForm(Model model){
