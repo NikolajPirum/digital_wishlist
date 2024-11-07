@@ -8,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -63,6 +67,7 @@ public class WishRepository {
         String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
         jdbcTemplate.update(query, wishlist.getListName());
     }
+
 
     public List<Present> getPresentsByWishListId(int id){
         String query = "select * from present where WishlistID = ?";
@@ -126,6 +131,5 @@ public class WishRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
-
-
-    }}
+    }
+}

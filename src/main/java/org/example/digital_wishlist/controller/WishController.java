@@ -8,7 +8,6 @@ import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -16,7 +15,6 @@ import java.util.List;
 public class WishController {
 
     private final WishService service;
-
 
     public WishController(WishService service) {
         this.service = service;
@@ -35,7 +33,7 @@ public class WishController {
 
         return "wishListSite";
     }
-/*
+
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         Wishlist wishlist = service.getWishList(id);
@@ -49,7 +47,7 @@ public class WishController {
         model.addAttribute("presents", presents);
         return "wishList";
     }
-*/
+
     // form for adding a new wish
     @GetMapping("create_wish")
     public String showAddWishForm(Model model){
