@@ -68,13 +68,12 @@ public class WishRepository {
         jdbcTemplate.update(query, wishlist.getListName());
     }
 
-    /*public readUser(){
+    public readUser(){
         // code to readUser
     }
-    /*
-    public List<Present> viewWishlists(){
+
+    public readWishlist(){
         // code to readWishlist
-        String query = "select * from present where wishlistId = ?";
     }
 
     public updateWishlist(){

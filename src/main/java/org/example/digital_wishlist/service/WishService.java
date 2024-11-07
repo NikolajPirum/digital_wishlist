@@ -12,11 +12,9 @@ import java.util.List;
 public class WishService {
 
     private final WishRepository repository;
-    private final WishRepository wishRepository;
 
-    public WishService(WishRepository repository, WishRepository wishRepository) {
+    public WishService(WishRepository repository) {
         this.repository = repository;
-        this.wishRepository = wishRepository;
     }
 
 
@@ -33,13 +31,13 @@ public class WishService {
         return repository.getAllWishLists();
     }
 
-    /*public Wishlist getWishList(int id){
-        return repository.getWishlist(id);
+    public Wishlist getWishList(int id){
+        repository.getWishlist(id);
     }
 
     public List<Present> getPresentsByWishId(int id){
         return repository.getPresentsByWishListId(id);
-    }*/
+    }
 
     public void addWish(Present present){
         repository.addWish(present);
@@ -54,7 +52,6 @@ public class WishService {
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
-
     public User findUser(String username){
         return repository.findUser(username);
     }

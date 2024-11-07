@@ -1,6 +1,5 @@
 package org.example.digital_wishlist.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +38,7 @@ public class WishController {
         return "wishListSite";
     }
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
@@ -53,7 +51,7 @@ public class WishController {
         model.addAttribute("presents", presents);
         return "wishList";
     }
-*/
+
     // form for adding a new wish
     @GetMapping("/create_wish")
     public String showAddWishForm(Model model){
@@ -150,9 +148,6 @@ public class WishController {
 
         service.createWishlist(wishlistName, userId);
 
-        return "redirect:/wishListSite";
-    }
-    /*
     public readUser(){
         // code to readUser
     }

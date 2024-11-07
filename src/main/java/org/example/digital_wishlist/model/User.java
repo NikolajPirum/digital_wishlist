@@ -3,7 +3,6 @@ package org.example.digital_wishlist.model;
 import java.util.ArrayList;
 
 public class User {
-    private int id;
     private static String name;
     private static String email;
     private static String password;
