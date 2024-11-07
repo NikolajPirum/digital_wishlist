@@ -9,21 +9,8 @@ CREATE TABLE AppUser (
                          Username VARCHAR(30),
                          Password VARCHAR(30),
                          Email VARCHAR(50),
-                         WishlistID INTEGER,
                          PRIMARY KEY(UserID)
-                         -- This column will hold foreign key
-);
-
--- Create Present table
-CREATE TABLE Present (
-                         PresentID INTEGER NOT NULL AUTO_INCREMENT,
-                         Presentname VARCHAR(30),
-                         Brand VARCHAR(30),
-                         Price DECIMAL(10,2),
-                         WishlistID INTEGER,  -- This column will hold foreign key
-                         Link VARCHAR(255),
-                         PRIMARY KEY(PresentID)
-    -- FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
+    -- This column will hold foreign key
 );
 
 -- Create WishList table
@@ -35,6 +22,18 @@ CREATE TABLE WishList (
                           FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
+-- Create Present table
+CREATE TABLE Present (
+                         PresentID INTEGER NOT NULL AUTO_INCREMENT,
+                         Presentname VARCHAR(30),
+                         Brand VARCHAR(30),
+                         Price DECIMAL(10,2),
+                         WishlistID INTEGER,  -- This column will hold foreign key
+                         Link VARCHAR(255),
+                         PRIMARY KEY(PresentID),
+                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
+);
+
 
 -- Create Reserve table
 CREATE TABLE Reserve (
@@ -42,7 +41,7 @@ CREATE TABLE Reserve (
                          PresentID INTEGER,
                          UserID INTEGER,
                          PRIMARY KEY(ReserveID),
-                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID) ON DELETE CASCADE,
                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
