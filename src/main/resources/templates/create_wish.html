@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Wish</title>
+</head>
+<body>
+<h1> Add a Wish to a wishlist</h1>
+<form th:action="@{/create_wish}" th:object="${present}" method="post">
+
+    <div>
+        <label>Name:</label>
+        <input id="name" type="text" th:field="*{name}" required >
+    </div>
+
+
+    <div>
+        <label>Link:</label>
+        <input id="link" type="text" th:field="*{link}" >
+    </div>
+
+
+    <div>
+        <label>Price:</label>
+        <input id="price" type="text" th:field="*{price}" required>
+    </div>
+
+    <div>
+        <label>Brand:</label>
+        <input id="brand" type="text" th:field="*{brand}" >
+    </div>
+
+    <div>
+        <label>Add to a wishlist:</label>
+        <select th:field="*{wishListId}" required>
+            <option value="" disabled selected>Select a Wishlist</option>
+            <option th:each="wishList : ${wishlists}"
+                    th:value="${wishList.id}"
+                    th:text="${wishList.listName}"
+            ></option>
+
+        </select>
+    </div>
+    <button type="submit">Add wish</button>
+</form>
+
+</body>
+</html>

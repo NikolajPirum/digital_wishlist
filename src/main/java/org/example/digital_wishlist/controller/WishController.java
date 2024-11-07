@@ -34,6 +34,7 @@ public class WishController {
         return "wishListSite";
     }
 
+    // problemer med status i present (reserve)
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         Wishlist wishlist = service.getWishList(id);
@@ -45,7 +46,7 @@ public class WishController {
 
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presents", presents);
-        return "wishList";
+        return "wishlist";
     }
 
     // form for adding a new wish
