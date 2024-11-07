@@ -9,10 +9,11 @@ public class Present {
     private String Presentname;
     private Integer wishListId;
 
-    public Present(int id, int price, String name) {
+    public Present(int id, int price, String name, String link) {
         this.id = id;
         this.Price = price;
         this.Presentname = name;
+        this.link = link;
     }
 
     public Present(){

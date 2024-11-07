@@ -29,7 +29,8 @@ public class WishRepository {
     private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
             rs.getInt("PresentID"),
             rs.getInt("Price"),
-            rs.getString("Presentname")
+            rs.getString("Presentname"),
+            rs.getString("Link")
     );
 
     public void createUser(User user1){
