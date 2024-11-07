@@ -72,4 +72,11 @@ public class WishService {
     }
 
 
+    public List<Present> getPresents(int id) {
+       return repository.getPresents(id);
+    }
+
+    public List<Integer> getReservedPresentIds(int id) {
+        return repository.getReservedPresentIds(id);
+    }
 }

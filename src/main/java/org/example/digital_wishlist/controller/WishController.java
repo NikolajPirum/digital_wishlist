@@ -8,7 +8,12 @@ import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller("/")
@@ -19,12 +24,14 @@ public class WishController {
     public WishController(WishService service) {
         this.service = service;
     }
-/*
+    /*
     @GetMapping("/favicon.ico")
     public void favicon() {
         // Do nothing or log the request if needed
     }
-*/
+
+     */
+
     @GetMapping("/overview")
     public String overview(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
@@ -39,14 +46,27 @@ public class WishController {
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
 
-        if(wishlist == null) {
+        if (wishlist == null) {
             return "redirect:/wishListSite";
         }
 
+        // Get the list of reserved present IDs for this wishlist
+        List<Integer> reservedPresentIds = service.getReservedPresentIds(id);
+
+        // Map each Present to a Boolean indicating its reservation status
+        Map<Present, Boolean> presentWithStatus = new LinkedHashMap<>();
+        for (Present present : presents) {
+            boolean isReserved = reservedPresentIds.contains(present.getId());
+            presentWithStatus.put(present, isReserved);
+        }
+
         model.addAttribute("wishlist", wishlist);
-        model.addAttribute("presents", presents);
+        model.addAttribute("presentWithStatus", presentWithStatus); // Pass the map to the view
         return "wishList";
     }
+
+
+
 
     // form for adding a new wish
     @GetMapping("create_wish")
@@ -106,51 +126,56 @@ public class WishController {
         return "login";
     }
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) throws InterruptedException {
+    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
         User foundUser = service.findUser(user.getUsername());
+
+        if (foundUser != null) {
+            System.out.println("Found user: " + foundUser.getUsername() + " with ID: " + foundUser.getId());
+        } else {
+            System.out.println("No user found with username: " + user.getUsername());
+        }
 
         // Check for password match
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
-            // Store user ID in session
             session.setAttribute("userId", foundUser.getId());
-
-            // Redirect to the user's wishlist page or homepage after login
-            return "redirect:/overview"; // Adjust to the appropriate page
+            return "redirect:/overview";
         } else {
-            // Add an error message and reload the login page if credentials are incorrect
             model.addAttribute("error", "Wrong Password or Username");
             return "login";
         }
     }
 
 
+
+
     @PostMapping("/reserve")
-    public String reservePresent(@RequestParam("wishId") int wishId, HttpSession session, Model model) {
+    public String reservePresent(@RequestParam("presentId") int wishlistId, HttpSession session, RedirectAttributes redirectAttributes) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
             return "redirect:/login";
         }
         User user = service.findUserById(userId);
-        boolean isReserved = service.reservePresent(wishId, userId);
-        model.addAttribute("message", isReserved);
-        model.addAttribute("messageText", isReserved ? "Reserved successfully" : "Already reserved");
+        boolean isReserved = service.reservePresent(wishlistId, userId);
 
-        return "redirect:/overview"; // Ensure that this page has logic to display the message
+        // Add a flash attribute to pass the message after redirect
+        redirectAttributes.addFlashAttribute("message", isReserved);
+
+        // Redirect to the wishlist page for this wishId
+        return "redirect:/" + wishlistId; // redirects to the specific wishlist page, handled by getWishlist
     }
 
-
     @PostMapping("/cancel-reservation")
-    public String cancelReservation(@RequestParam("wishId") int wishId, HttpSession session, Model model) {
+    public String cancelReservation(@RequestParam("presentId") int wishlistId, HttpSession session, Model model) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) return "redirect:/login";
 
-        boolean success = service.cancelReservation(wishId, userId);
+        boolean success = service.cancelReservation(wishlistId, userId);
         if (success) {
             model.addAttribute("message", "Reservation canceled successfully.");
         } else {
             model.addAttribute("message", "Failed to cancel reservation.");
         }
-        return "redirect:/wishList"; // Redirect to the wishlist after cancellation
+        return "redirect:/" + wishlistId; // Redirect to the wishlist after cancellation
     }
 
     /*@GetMapping("/create_wishlist")
@@ -158,7 +183,7 @@ public class WishController {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
- */
+
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
         service.createWishlist(wishlist);
@@ -173,25 +198,7 @@ public class WishController {
 
 
         service.createWishlist(wishlistName, userId);
-
-    public readUser(){
-        // code to readUser
     }
 
-    public readWishlist(){
-        // code to readWishlist
-    }
-
-    public updateWishlist(){
-        // code to updateWishlist
-    }
-
-    public deleteUser(){
-        // code to deleteUser
-    }
-
-    public deleteWishlist(){
-        // code to deleteWishlist
-    }
      */
 }
