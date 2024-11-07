@@ -3,10 +3,11 @@ package org.example.digital_wishlist.model;
 import java.util.ArrayList;
 
 public class User {
-    private static String name;
-    private static String email;
-    private static String password;
-    private static String username;
+    private int id;
+    private String name;
+    private String email;
+    private String password;
+    private String username;
     private ArrayList<Present> reserveList = new ArrayList<>();
     private String wishlistID;
 
