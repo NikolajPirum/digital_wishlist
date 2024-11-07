@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
@@ -24,12 +25,12 @@ public class WishController {
     public WishController(WishService service) {
         this.service = service;
     }
-
+/*
     @GetMapping("/favicon.ico")
     public void favicon() {
         // Do nothing or log the request if needed
     }
-
+*/
     @GetMapping("/overview")
     public String overview(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
@@ -39,7 +40,7 @@ public class WishController {
         return "wishListSite";
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
@@ -52,7 +53,7 @@ public class WishController {
         model.addAttribute("presents", presents);
         return "wishList";
     }
-
+*/
     // form for adding a new wish
     @GetMapping("/create_wish")
     public String showAddWishForm(Model model){
@@ -129,22 +130,16 @@ public class WishController {
         }
     }
     @GetMapping("/create_wishlist")
-    public String showCreateWishListForm(Model model, Principal principal) {
-        String username = principal.getName();
-        User user = service.findUser(username);
+    public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist());
         return "create_wishlist";
     }
 
     @PostMapping("/create_wishlist")
-    public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
-        String username = principal.getName();
-        User user = service.findUser(username);
-
-
-        service.createWishlist(wishlistName, userId);
+    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
+        service.createWishlist(wishlist);
         model.addAttribute("success", true);
-        return "wishlistSite";
+        return "redirect:/overview";
     }
     /*
     @PostMapping("/create_wishlist")

@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 @Repository
 public class WishRepository {
@@ -61,17 +62,17 @@ public class WishRepository {
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
 
-    public void createWishlist( String wishlistName, int userId){
+    public void createWishlist(Wishlist wishlist){
         // code to createWishlist
-        String query = "INSERT INTO wishlist(listName, userID) VALUES (?, ?)";
-        jdbcTemplate.update(query, wishlistName, userId);
+        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
+        jdbcTemplate.update(query, wishlist.getListName());
     }
 
-    public readUser(){
+    /*public readUser(){
         // code to readUser
     }
-*//*
-    public List<Present> viewWishlists(int wishlistId){
+    /*
+    public List<Present> viewWishlists(){
         // code to readWishlist
         String query = "select * from present where wishlistId = ?";
     }
@@ -98,7 +99,6 @@ public class WishRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
-        return user_exist; // Return null if no user was found
     }
 
     // Using JdbcTemplate to check if email exists
@@ -106,5 +106,13 @@ public class WishRepository {
         String query = "SELECT COUNT(*) FROM AppUser WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
+    }
+    public User findUserById(int id) {
+        String query = "SELECT * FROM AppUser WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // or handle according to your application's needs
+        }
     }
 }

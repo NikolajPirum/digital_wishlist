@@ -33,13 +33,13 @@ public class WishService {
         return repository.getAllWishLists();
     }
 
-    public Wishlist getWishList(int id){
+    /*public Wishlist getWishList(int id){
         return repository.getWishlist(id);
     }
 
     public List<Present> getPresentsByWishId(int id){
         return repository.getPresentsByWishListId(id);
-    }
+    }*/
 
     public void addWish(Present present){
         repository.addWish(present);
@@ -55,15 +55,14 @@ public class WishService {
         return repository.findUserByEmail(email);
     }
 
-    public void createWishlist(Wishlist wishlist){
-        wishRepository.createWishlist(wishlist);
-    }
     public User findUser(String username){
         return repository.findUser(username);
     }
-
-    public void createWishlist(String wishlistName, int userId){
-        repository.createWishlist(wishlistName, userId);
+    public User findUserById(int id){
+        return repository.findUserById(id);
+    }
+    public void createWishlist(Wishlist wishlist){
+        repository.createWishlist(wishlist);
     }
     /*
     public readUser(){
@@ -80,5 +79,5 @@ public class WishService {
 
     public deleteWishlist(){
         // code to deleteWishlist
-    }
+    }*/
 }
