@@ -9,10 +9,11 @@ public class Present {
     private String presentname;
     private Integer wishListId;
 
-    public Present(int id, int price, String name) {
+    public Present(int id, int price, String name, String link) {
         this.id = id;
         this.price = price;
         this.presentname = name;
+        this.link = link;
     }
 
     public Present(){
@@ -28,7 +29,7 @@ public class Present {
     }
 
     public void setPresentname(String presentname) {
-        presentname = presentname;
+        this.presentname = presentname;
     }
 
     public void setBrand(String brand) {
@@ -68,11 +69,11 @@ public class Present {
     }
 
     public String getName() {
-        return presentname;
+        return name;
     }
 
     public void setName(String name) {
-        this.presentname = name;
+        this.name = name;
     }
 
 }

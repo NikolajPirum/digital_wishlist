@@ -1,6 +1,7 @@
 --CREATE DATABASE WishListDB IF NOT EXIST;
 -- Use the database
 
+
 -- Create AppUser table
 CREATE TABLE AppUser (
                          UserID INTEGER NOT NULL AUTO_INCREMENT,
@@ -8,8 +9,9 @@ CREATE TABLE AppUser (
                          Username VARCHAR(30),
                          Password VARCHAR(30),
                          Email VARCHAR(50),
-                         WishlistID INTEGER,  -- This column will hold foreign key
+                         WishlistID INTEGER,
                          PRIMARY KEY(UserID)
+                         -- This column will hold foreign key
 );
 
 -- Create Present table
@@ -21,6 +23,7 @@ CREATE TABLE Present (
                          WishlistID INTEGER,  -- This column will hold foreign key
                          Link VARCHAR(255),
                          PRIMARY KEY(PresentID)
+    -- FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
 );
 
 -- Create WishList table
@@ -32,15 +35,15 @@ CREATE TABLE WishList (
                           FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
+
 -- Create Reserve table
 CREATE TABLE Reserve (
                          ReserveID INTEGER NOT NULL AUTO_INCREMENT,
                          PresentID INTEGER,
                          UserID INTEGER,
                          PRIMARY KEY(ReserveID),
-                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID) ON DELETE CASCADE,
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
-
 );
 
 -- Insert data into AppUser table

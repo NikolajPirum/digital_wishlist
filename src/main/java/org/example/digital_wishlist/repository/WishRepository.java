@@ -25,17 +25,17 @@ public class WishRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // rowMapper til at skabe wishList objekter ud af ResultSets
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistID"),
             rs.getString("Wishlistname")
     );
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
-    private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
+    private final RowMapper<Present> presentRowMapper = (rs,rowNum) -> new Present(
             rs.getInt("PresentID"),
             rs.getInt("Price"),
-            rs.getString("Presentname")
+            rs.getString("Presentname"),
+            rs.getString("Link")
     );
 
     public void createUser(User user1){
@@ -59,36 +59,31 @@ public class WishRepository {
         jdbcTemplate.update(query, present.getName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
     }
 
-    public List<Present> getPresentsByWishListId(int wishListId){
-        String query = "select * from Present where WishlistID = ?";
-        return jdbcTemplate.query(query, presentRowMapper, wishListId);
-
-    }
-
-    public Wishlist getWishlist(int id){
-        String query = "select * from WishList where WishlistID = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
-    }
-
     public List<Wishlist> getAllWishLists(){
-        String query = "select * from WishList";
+        String query = "select * from wishlist";
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
 
-    public createWishlist(){
+    public void createWishlist(Wishlist wishlist){
         // code to createWishlist
+        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
+        jdbcTemplate.update(query, wishlist.getListName());
     }
 
-    public readUser(){
-        // code to readUser
+    public List<Present> getPresentsByWishlistId(int id){
+        String query = "select * from present where WishlistID = ?";
+        return jdbcTemplate.query(query, presentRowMapper, id);
     }
 
-    public readWishlist(){
-        // code to readWishlist
+    public Wishlist getWishList(int id){
+        String query = "select * from wishlist where WishlistID = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 
-    public updateWishlist(){
-        // code to updateWishlist
+
+    public List<Present> getPresentsByWishListId(int id){
+        String query = "select * from present where WishlistID = ?";
+        return jdbcTemplate.query(query, presentRowMapper, id);
     }
     public Wishlist findWishlistByUsername(String username, Wishlist wishlist){
         String query = "select * from Wishlist where UserId = ?";
@@ -99,8 +94,9 @@ public class WishRepository {
         return jdbcTemplate.update(query, present.getName(), present.getId());
     }
 
-    public deleteWishlist(){
-        // code to deleteWishlist
+    public Wishlist getWishlist(int id){
+        String query = "select * from wishlist where WishlistID = ?";
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 
     public User findUsername(String username) {
@@ -121,7 +117,6 @@ public class WishRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
-        return user_exist; // Return null if no user was found
     }
 
     // Using JdbcTemplate to check if email exists
@@ -130,4 +125,36 @@ public class WishRepository {
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
     }
-}
+
+    public boolean reservePresent(int presentId, int userId) {
+        // Check if the reservation already exists
+        String checkSql = "SELECT COUNT(*) FROM reservation WHERE present_id = ? AND user_id = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, presentId, userId);
+
+        if (count != null && count > 0) {
+            // Reservation already exists, return false
+            return false;
+        }
+
+        // Insert a new reservation
+        String sql = "INSERT INTO reservation (present_id, user_id) VALUES (?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
+        return rowsAffected > 0;  // Return true if the reservation was successfully made
+    }
+
+    public boolean cancelReservation(int presentId, int userId) {
+        String sql = "DELETE FROM reservation WHERE present_id = ? AND user_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
+        return rowsAffected > 0;  // Return true if the reservation was canceled
+    }
+
+    public User findUserById(int id) {
+        String query = "SELECT * FROM AppUser WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(query,new BeanPropertyRowMapper<>(User.class),id);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // or handle according to your application's needs
+        }
+
+
+    }}

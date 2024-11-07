@@ -4,43 +4,50 @@ import java.util.ArrayList;
 
 public class Wishlist {
     private int wishlistID;
-    private String wishlistName;
+    private String listName;
     private ArrayList<Present> PresentList = new ArrayList<>();
     private boolean reserv = false;
+    private int userId;
     private int wishlistId;
     private String userName;
 
 
     public Wishlist(String listName, ArrayList<Present> PresentList, boolean isReserv) {
-        this.wishlistName = listName;
+        this.listName = listName;
         this.PresentList = PresentList;
         this.reserv = isReserv;
     }
 
-    public Wishlist(int id, String listName){
-        this.wishlistID = id;
-        this.wishlistName = listName;
+    public Wishlist(int wishlistID, String listName){
+        this.wishlistID = wishlistID;
+        this.listName = listName;
     }
 
+    public Wishlist(String listName, int userId, ArrayList<Present> Presentlist){
+        this.listName = listName;
+        this.userId = userId;
+        this.PresentList = Presentlist;
+    }
     public Wishlist(){
 
     }
-    public Wishlist(int wishlistId, String wishlistName, String userName){
-        this.wishlistName = wishlistName;
+    public Wishlist(int wishlistId, String listName, String userName){
+        this.listName = listName;
         this.wishlistId = wishlistId;
         this.userName = userName;
     }
+    public int getWishlistID() {return wishlistID;}
 
     public int getId() {
         return wishlistID;
     }
 
     public String getListName() {
-        return wishlistName;
+        return listName;
     }
 
     public void setListName(String listName) {
-        this.wishlistName = listName;
+        this.listName = listName;
     }
 
     public ArrayList<Present> getPresentList() {
@@ -58,4 +65,9 @@ public class Wishlist {
     public void setReserv(boolean reserv) {
         this.reserv = reserv;
     }
+
+    public int getUserID() { return userId; }
+
+    public void setUserID(int userID) { this.userId = userID; }
+
 }

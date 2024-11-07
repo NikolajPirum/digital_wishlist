@@ -36,7 +36,7 @@ public class WishService {
     }
 
     public List<Present> getPresentsByWishId(int id){
-        return repository.getPresentsByWishListId(id);
+        return repository.getPresentsByWishlistId(id);
     }
 
     public void addWish(Present present){
@@ -46,38 +46,36 @@ public class WishService {
     public int deleteWish(int id){
         return repository.deleteWish(id);
     }
+
     public boolean findByUsername(String username){
         return repository.findByUsername(username);
     }
+
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
+
     public User findUser(String username){
         return repository.findUser(username);
     }
-    public createWishlist(){
-        // code to createWishlist
+
+    public User findUserById(int id){
+        return repository.findUserById(id);
     }
 
-    public readUser(){
-        // code to readUser
+    public void createWishlist(Wishlist wishlist){
+        repository.createWishlist(wishlist);
     }
 
-    public readWishlist(){
-        // code to readWishlist
+    public boolean reservePresent(int presentId, int userId) {
+        return repository.reservePresent(presentId, userId);
     }
 
     public Wishlist updateWishlist(Wishlist wishlist){
         repository.updateWishlist(wishlist);
-        // code to updateWishlist
+
+    public boolean cancelReservation(int presentId, int userId) {
+        return repository.cancelReservation(presentId, userId);
     }
 
-    public deleteWishlist(){
-        // code to deleteWishlist
-    }
-
-
-    public String updatePresent() {
-        String aNewValue = repository.updatePresent();
-    }
 }
