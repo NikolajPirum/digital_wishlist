@@ -144,6 +144,12 @@ public class WishController {
             return "login";
         }
     }
+    @GetMapping("/favicon.ico")
+    @ResponseBody
+    public void returnFavicon() {
+        // You can leave this method empty, or return an actual favicon if desired
+    }
+
 
 
 
