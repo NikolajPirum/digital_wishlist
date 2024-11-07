@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-@Controller
+@Controller("/")
 public class WishController {
 
     private final WishService service;
@@ -52,7 +52,7 @@ public class WishController {
     }
 
     // form for adding a new wish
-    @GetMapping("/create_wish")
+    @GetMapping("create_wish")
     public String showAddWishForm(Model model){
         List<Wishlist> wishLists = service.getAllWishLists();
 
@@ -69,7 +69,7 @@ public class WishController {
     public String addWish(@ModelAttribute Present present){
         service.addWish(present);
 
-        return "wishListSite";
+        return "redirect:/overview";
     }
 
     @PostMapping("/{id}/delete")
@@ -77,9 +77,9 @@ public class WishController {
         int deletedRows = service.deleteWish(id);
 
         if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
-            return "wishListSite";
+            return "redirect:/overview";
         }else{
-            return "redirect:/wisList";
+            return "wishList";
         }
 
     }
