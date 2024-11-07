@@ -8,6 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -54,26 +58,17 @@ public class WishRepository {
         jdbcTemplate.update(query, present.getName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
     }
 
-    public List<Present> getPresentsByWishListId(int wishListId){
-        String query = "select * from Present where WishlistID = ?";
-        return jdbcTemplate.query(query, presentRowMapper, wishListId);
-
-    }
-
-    public Wishlist getWishlist(int id){
-        String query = "select * from WishList where WishlistID = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
-    }
-
     public List<Wishlist> getAllWishLists(){
-        String query = "select * from WishList";
+        String query = "select * from wishlist";
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
-    /*
-    public createWishlist(){
-        // code to createWishlist
-    }
 
+    public void createWishlist(Wishlist wishlist){
+        // code to createWishlist
+        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
+        jdbcTemplate.update(query, wishlist.getListName());
+    }
+/*
     public readUser(){
         // code to readUser
     }
@@ -111,5 +106,13 @@ public class WishRepository {
         String query = "SELECT COUNT(*) FROM AppUser WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
+    }
+    public User findUserById(int id) {
+        String query = "SELECT * FROM AppUser WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<>(User.class), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // or handle according to your application's needs
+        }
     }
 }
