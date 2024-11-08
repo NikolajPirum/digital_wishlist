@@ -48,14 +48,26 @@ public class WishController {
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
 
-        if(wishlist == null) {
-            return "redirect:/wishListSite";
+        if (wishlist == null) {
+            return "redirect:/wishListSite";  // Redirect if wishlist is not found
+        }
+
+        // Retrieve reserved present IDs for this wishlist
+        List<Integer> reservedPresentIds = service.getReservedPresentIds(id);
+        System.out.println("Reserved Present IDs for wishlist " + id + ": " + reservedPresentIds); // Debugging output
+
+        // Map each Present to its reservation status
+        Map<Present, Boolean> presentWithStatus = new LinkedHashMap<>();
+        for (Present present : presents) {
+            boolean isReserved = reservedPresentIds.contains(present.getId());
+            presentWithStatus.put(present, isReserved); // Store Present with its reservation status
         }
 
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
     }
+
 
 
 
