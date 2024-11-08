@@ -15,23 +15,24 @@ public class WishRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
-        rs.getInt("WishlistId"),
-        rs.getString("Wishlistname"),
-        rs.getString("UserName")
-    );
-
     public WishRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
-            rs.getInt("WishlistID"),
-            rs.getString("Wishlistname")
+            rs.getInt("WishlistId"),
+            rs.getString("Wishlistname"),
+            rs.getString("UserName")
     );
 
+
+    //private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
+    //        rs.getInt("WishlistID"),
+    //        rs.getString("Wishlistname")
+    //);
+
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
-    private final RowMapper<Present> presentRowMapper = (rs,rowNum) -> new Present(
+    private final RowMapper<Present> presentRowMapper = (rs, rowNum) -> new Present(
             rs.getInt("PresentID"),
             rs.getInt("Price"),
             rs.getString("Presentname"),
@@ -66,7 +67,7 @@ public class WishRepository {
 
     public void createWishlist(Wishlist wishlist){
         // code to createWishlist
-        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
+        String query = "INSERT INTO wishlist(WishlistName) VALUES (?)";
         jdbcTemplate.update(query, wishlist.getListName());
     }
 
@@ -80,14 +81,25 @@ public class WishRepository {
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 
+    public int updateWishlist(Wishlist wishlist) {
+        String query = "UPDATE Wishlist SET name =? WHERE wishlist_id =?";
+        //returnere int, som er antallet af rækker, der blev påvirket af forespørgslen
+        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
+    }
 
     public List<Present> getPresentsByWishListId(int id){
         String query = "select * from present where WishlistID = ?";
         return jdbcTemplate.query(query, presentRowMapper, id);
     }
-    public Wishlist findWishlistByUsername(String username, Wishlist wishlist){
+
+    public int updatePresent(Present present) {
+        String query = "UPDATE Present SET name =? WHERE present_id = ?";
+        return jdbcTemplate.update(query, present.getName(), present.getId());
+    }
+
+    public Wishlist findWishlistByUsername(User user, Wishlist wishlist) {
         String query = "select * from Wishlist where UserId = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, username);
+        return jdbcTemplate.queryForObject(query, wishlistRowMapper, user.getUsername());
     }
     public int updateNameOnPresent(Present present){
         String query = "UPDATE Present SET name = ? WHERE PresentId = ?";
@@ -156,5 +168,5 @@ public class WishRepository {
             return null; // or handle according to your application's needs
         }
 
-
-    }}
+    }
+}

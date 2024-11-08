@@ -6,13 +6,13 @@ public class Present {
     private int price;
     private String link;
     private String brand;
-    private String presentname;
+    private String presentName;
     private Integer wishListId;
 
     public Present(int id, int price, String name, String link) {
         this.id = id;
         this.price = price;
-        this.presentname = name;
+        this.presentName = name;
         this.link = link;
     }
 
@@ -20,16 +20,16 @@ public class Present {
 
     }
 
-    public String getPresentname() {
-        return presentname;
+    public String getPresentName() {
+        return presentName;
     }
 
     public String getBrand() {
         return brand;
     }
 
-    public void setPresentname(String presentname) {
-        this.presentname = presentname;
+    public void setPresentName(String presentName) {
+        this.presentName = presentName;
     }
 
     public void setBrand(String brand) {

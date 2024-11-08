@@ -73,9 +73,14 @@ public class WishService {
 
     public Wishlist updateWishlist(Wishlist wishlist){
         repository.updateWishlist(wishlist);
+        return wishlist;
+    }
 
     public boolean cancelReservation(int presentId, int userId) {
         return repository.cancelReservation(presentId, userId);
     }
-
+    public Present updatePresent(Present present) {
+        repository.updatePresent(present);
+        return present;
+    }
 }

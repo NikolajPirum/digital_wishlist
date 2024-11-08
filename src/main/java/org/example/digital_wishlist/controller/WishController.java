@@ -8,6 +8,7 @@ import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -167,11 +168,12 @@ public class WishController {
         model.addAttribute("success", true);
         return "redirect:/overview";
     }
-    /*
+
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
         String username = principal.getName();
         User user = service.findUser(username);
+        }
 
 
         service.createWishlist(wishlistName, userId);
@@ -183,17 +185,34 @@ public class WishController {
     public void readWishlist(){
         // code to readWishlist
     }
-    @GetMapping("{name}/edit")
-    public String showWishlistUpdateForm(@PathVariable("name") String name, Model model){
-        Wishlist wishlist = wishService.getWishlistByName
+
+    @GetMapping("/{id}/editWishlist")
+    public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = wishlist.getPresentList();
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return"updateWishlist";
+    }
+    @GetMapping("/{id}/editPresent")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model){
+        List<Present> presents = service.getPresentsByWishId(id);
+        model.addAttribute("UpdatePresent", presents);
+        return "updatePresent";
     }
 
-    @PostMapping("update/presentName")
-    public void updatePresent(@ModelAttribute ("updatePresent") Present present, Model model){
-        wishService.updatePresent(present.getName(), present.getId());
-        model.addAttribute("changeName", present.setName());
+    @PostMapping("/update/presentName")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+        service.updatePresent(present);
+        model.addAttribute("updatedPresentName", present.getName());
+        return "redirect:/overview";
+    }
 
-        // code to updateWishlist
+    @PostMapping("/update/wishlist")
+    public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
+        service.updateWishlist(wishlist);
+        model.addAttribute("updatedWishlistName", wishlist.getListName());
+        return "redirect:/overview";
     }
 
     public void deleteUser(){
@@ -203,5 +222,4 @@ public class WishController {
     public void deleteWishlist(){
         // code to deleteWishlist
     }
-
 }
