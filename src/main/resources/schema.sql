@@ -10,7 +10,16 @@ CREATE TABLE AppUser (
                          Password VARCHAR(30),
                          Email VARCHAR(50),
                          PRIMARY KEY(UserID)
-                         -- This column will hold foreign key
+    -- This column will hold foreign key
+);
+
+-- Create WishList table
+CREATE TABLE WishList (
+                          WishlistID INTEGER NOT NULL AUTO_INCREMENT,
+                          Wishlistname VARCHAR(30),
+                          UserID INTEGER,
+                          PRIMARY KEY(WishlistID),
+                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
 -- Create Present table
@@ -21,17 +30,8 @@ CREATE TABLE Present (
                          Price DECIMAL(10,2),
                          WishlistID INTEGER,  -- This column will hold foreign key
                          Link VARCHAR(255),
-                         PRIMARY KEY(PresentID)
-    -- FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
-);
-
--- Create WishList table
-CREATE TABLE WishList (
-                          WishlistID INTEGER NOT NULL AUTO_INCREMENT,
-                          Wishlistname VARCHAR(30),
-                          UserID INTEGER,
-                          PRIMARY KEY(WishlistID),
-                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
+                         PRIMARY KEY(PresentID),
+                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
 );
 
 

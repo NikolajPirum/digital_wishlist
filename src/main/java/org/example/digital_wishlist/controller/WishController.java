@@ -41,6 +41,7 @@ public class WishController {
         return "wishListSite";
     }
 
+    // problemer med status i present (reserve)
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         // Fetch wishlist and presents for the specified wishlist ID
@@ -65,6 +66,7 @@ public class WishController {
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
+
     }
 
 
