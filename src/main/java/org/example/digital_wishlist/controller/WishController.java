@@ -195,11 +195,13 @@ public class WishController {
         return "redirect:/" + wishlistId;
     }
 
+   /*
     @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
+    */
 
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
@@ -208,6 +210,7 @@ public class WishController {
         return "redirect:/overview";
     }
 
+    /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
         String username = principal.getName();
@@ -216,7 +219,7 @@ public class WishController {
 
 
         service.createWishlist(wishlistName, userId);
-
+        */
     public void readUser(){
         // code to readUser
     }
@@ -236,6 +239,7 @@ public class WishController {
     @GetMapping("/{id}/editPresent")
     public String showPresentUpdateForm(@PathVariable("id") int id, Model model){
         List<Present> presents = service.getPresentsByWishId(id);
+
         model.addAttribute("UpdatePresent", presents);
         return "updatePresent";
     }

@@ -7,7 +7,7 @@ public class Present {
     private String link;
     private String brand;
     private String presentName;
-    private Integer wishListId;
+    private int wishListId;
 
     public Present(int id, int price, String name, String link) {
         this.id = id;
@@ -48,7 +48,7 @@ public class Present {
         return wishListId;
     }
 
-    public void setWishListId(Integer wishListId) {
+    public void setWishListId(int wishListId) {
         this.wishListId = wishListId;
     }
 
