@@ -66,11 +66,7 @@ public class WishController {
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
-
     }
-
-
-
 
 
     // form for adding a new wish
@@ -124,8 +120,18 @@ public class WishController {
         service.createUser(user);
         model.addAttribute("success", true);
         return "create_user";
+    }
 
-    }@GetMapping("/login")
+    @GetMapping("/{userID}/wishlist")
+    public String showWishlistByUserId(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        List<Wishlist> wishlists = service.getWishlistByUserId(userId);
+
+        model.addAttribute("wishlists", wishlists);
+        return "personalWishListSite";
+    }
+
+    @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "login";
@@ -143,7 +149,7 @@ public class WishController {
         // Check for password match
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
             session.setAttribute("userId", foundUser.getId());
-            return "redirect:/overview";
+            return "redirect:/" + foundUser.getId() + "/wishlist";
         } else {
             model.addAttribute("error", "Wrong Password or Username");
             return "login";
@@ -154,9 +160,6 @@ public class WishController {
     public void returnFavicon() {
         // You can leave this method empty, or return an actual favicon if desired
     }
-
-
-
 
 
     @PostMapping("/reserve")
