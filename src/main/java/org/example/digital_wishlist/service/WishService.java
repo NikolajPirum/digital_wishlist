@@ -46,21 +46,28 @@ public class WishService {
     public int deleteWish(int id){
         return repository.deleteWish(id);
     }
+
     public boolean findByUsername(String username){
         return repository.findByUsername(username);
     }
+
     public boolean findUserByEmail(String email){
         return repository.findUserByEmail(email);
     }
+
     public User findUser(String username){
         return repository.findUser(username);
     }
+
     public User findUserById(int id){
+
         return repository.findUserById(id);
     }
+
     public void createWishlist(Wishlist wishlist){
         repository.createWishlist(wishlist);
     }
+
 
 
     public boolean reservePresent(int presentId, int userId) {
