@@ -41,25 +41,15 @@ public class WishController {
         return "wishListSite";
     }
 
+    // problemer med status i present (reserve)
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
         // Fetch wishlist and presents for the specified wishlist ID
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
 
-        if (wishlist == null) {
-            return "redirect:/wishListSite";  // Redirect if wishlist is not found
-        }
-
-        // Retrieve reserved present IDs for this wishlist
-        List<Integer> reservedPresentIds = service.getReservedPresentIds(id);
-        System.out.println("Reserved Present IDs for wishlist " + id + ": " + reservedPresentIds); // Debugging output
-
-        // Map each Present to its reservation status
-        Map<Present, Boolean> presentWithStatus = new LinkedHashMap<>();
-        for (Present present : presents) {
-            boolean isReserved = reservedPresentIds.contains(present.getId());
-            presentWithStatus.put(present, isReserved); // Store Present with its reservation status
+        if(wishlist == null) {
+            return "redirect:/wishListSite";
         }
 
         model.addAttribute("wishlist", wishlist);
@@ -140,9 +130,11 @@ public class WishController {
 
         // Check for password match
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            // Store user ID in session
             session.setAttribute("userId", foundUser.getId());
             return "redirect:/overview";
         } else {
+            // Add an error message and reload the login page if credentials are incorrect
             model.addAttribute("error", "Wrong Password or Username");
             return "login";
         }
@@ -196,13 +188,13 @@ public class WishController {
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
         return "redirect:/" + wishlistId;
     }
-
-    /*@GetMapping("/create_wishlist")
+        /*
+    @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
-
+    */
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
         service.createWishlist(wishlist);
