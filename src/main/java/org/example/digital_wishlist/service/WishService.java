@@ -80,4 +80,8 @@ public class WishService {
         return repository.cancelReservation(presentId, userId);
     }
 
+    public List<Wishlist> getWishlistsByUserId(int userId){
+        return repository.getWishlistByUserId(userId);
+    }
+
 }

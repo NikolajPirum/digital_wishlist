@@ -24,12 +24,23 @@ public class User {
         this.username = username;
         this.reserveList = reserveList;
     }
+
+    public User(int id, String name, String email, String password, String username) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+    }
+
+
     public User(){
 
     }
     public int getId() {return id;}
 
-    public void setId(int id) {id = id;}
+    public void setId(int id) {
+        this.id = id;}
 
     public String getName() {
         return name;

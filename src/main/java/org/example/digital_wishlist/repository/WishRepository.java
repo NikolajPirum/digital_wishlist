@@ -64,6 +64,10 @@ public class WishRepository {
         jdbcTemplate.update(query, wishlist.getListName());
     }
 
+    public List<Wishlist> getWishlistByUserId(int id){
+        String query = "select * from wishlist where UserID = ?";
+        return jdbcTemplate.query(query,wishlistRowMapper, id);
+    }
 
     public List<Present> getPresentsByWishlistId(int id){
         String query = "select * from present where WishlistID = ?";
@@ -138,6 +142,5 @@ public class WishRepository {
         } catch (EmptyResultDataAccessException e) {
             return null; // or handle according to your application's needs
         }
-
 
     }}

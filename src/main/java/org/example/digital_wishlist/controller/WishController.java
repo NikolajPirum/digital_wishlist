@@ -79,7 +79,6 @@ public class WishController {
         }else{
             return "wishList";
         }
-
     }
 
     @GetMapping("/create_user")
@@ -100,25 +99,39 @@ public class WishController {
         service.createUser(user);
         model.addAttribute("success", true);
         return "create_user";
+    }
 
-    }@GetMapping("/login")
+    @GetMapping("/{userID}/wishlist")
+    public String showWishlistByUserId(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        List<Wishlist> wishlists = service.getWishlistsByUserId(userId);
+
+        model.addAttribute("wishlists", wishlists);
+        return "personalWishListSite";
+    }
+
+
+    @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "login";
     }
+
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) throws InterruptedException {
+    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
         User foundUser = service.findUser(user.getUsername());
+
+        if (foundUser != null) {
+            System.out.println("Found user: " + foundUser.getUsername() + " with ID: " + foundUser.getId());
+        } else {
+            System.out.println("No user found with username: " + user.getUsername());
+        }
 
         // Check for password match
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
-            // Store user ID in session
             session.setAttribute("userId", foundUser.getId());
-
-            // Redirect to the user's wishlist page or homepage after login
-            return "redirect:/overview"; // Adjust to the appropriate page
+            return "redirect:/" + foundUser.getId()  + "/wishlist"; // Adjust to the appropriate page
         } else {
-            // Add an error message and reload the login page if credentials are incorrect
             model.addAttribute("error", "Wrong Password or Username");
             return "login";
         }
