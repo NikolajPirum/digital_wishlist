@@ -171,6 +171,18 @@ public class WishRepository {
 
     public List<Integer> getReservedPresentIds(int wishlistId) {
         String sql = "SELECT reserveID FROM Reserve WHERE reserveid IN (SELECT presentid FROM Present WHERE wishlistId = ?)";
-        return jdbcTemplate.queryForList(sql, new Object[]{wishlistId}, Integer.class);
+        List<Integer> reservedIds = jdbcTemplate.queryForList(sql, new Object[]{wishlistId}, Integer.class);
+        System.out.println("Reserved Present IDs for wishlist " + wishlistId + ": " + reservedIds); // Debugging output
+        return reservedIds;
+    }
+    public Integer getWishlistIdByPresentId(int presentId) {
+        String sql = "SELECT WishlistID FROM Present WHERE PresentID = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, presentId);
+        } catch (EmptyResultDataAccessException e) {
+            // Handle case where presentId does not exist
+            System.err.println("Present ID " + presentId + " does not exist.");
+            return null;
+        }
     }
 }

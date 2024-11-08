@@ -79,4 +79,8 @@ public class WishService {
     public List<Integer> getReservedPresentIds(int id) {
         return repository.getReservedPresentIds(id);
     }
+    public Integer getWishlistIdByPresentId(int presentId) {
+        return repository.getWishlistIdByPresentId(presentId);  // Call the repository method
+    }
+
 }

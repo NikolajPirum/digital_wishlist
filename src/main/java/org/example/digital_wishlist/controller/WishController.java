@@ -43,27 +43,30 @@ public class WishController {
 
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
+        // Fetch wishlist and presents for the specified wishlist ID
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
 
         if (wishlist == null) {
-            return "redirect:/wishListSite";
+            return "redirect:/wishListSite";  // Redirect if wishlist is not found
         }
 
-        // Get the list of reserved present IDs for this wishlist
+        // Retrieve reserved present IDs for this wishlist
         List<Integer> reservedPresentIds = service.getReservedPresentIds(id);
+        System.out.println("Reserved Present IDs for wishlist " + id + ": " + reservedPresentIds); // Debugging output
 
-        // Map each Present to a Boolean indicating its reservation status
+        // Map each Present to its reservation status
         Map<Present, Boolean> presentWithStatus = new LinkedHashMap<>();
         for (Present present : presents) {
             boolean isReserved = reservedPresentIds.contains(present.getId());
-            presentWithStatus.put(present, isReserved);
+            presentWithStatus.put(present, isReserved); // Store Present with its reservation status
         }
 
         model.addAttribute("wishlist", wishlist);
-        model.addAttribute("presentWithStatus", presentWithStatus); // Pass the map to the view
+        model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
     }
+
 
 
 
@@ -155,33 +158,43 @@ public class WishController {
 
 
     @PostMapping("/reserve")
-    public String reservePresent(@RequestParam("presentId") int wishlistId, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
-            return "redirect:/login";
+            return "redirect:/login";  // Redirect to login if user is not authenticated
         }
-        User user = service.findUserById(userId);
-        boolean isReserved = service.reservePresent(wishlistId, userId);
 
-        // Add a flash attribute to pass the message after redirect
-        redirectAttributes.addFlashAttribute("message", isReserved);
+        // Attempt to reserve the present
+        boolean isReserved = service.reservePresent(presentId, userId);
 
-        // Redirect to the wishlist page for this wishId
-        return "redirect:/" + wishlistId; // redirects to the specific wishlist page, handled by getWishlist
+        // Get the wishlist ID for this present
+        Integer wishlistId = service.getWishlistIdByPresentId(presentId);
+        if (wishlistId == null) {
+            return "redirect:/overview";  // Redirect to an error page if wishlistId is not found
+        }
+
+        // Redirect to the wishlist page, invoking getWishlist to refresh the status
+        return "redirect:/" + wishlistId;
     }
 
     @PostMapping("/cancel-reservation")
-    public String cancelReservation(@RequestParam("presentId") int wishlistId, HttpSession session, Model model) {
+    public String cancelReservation(@RequestParam("presentId") int presentId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        if (userId == null) return "redirect:/login";
-
-        boolean success = service.cancelReservation(wishlistId, userId);
-        if (success) {
-            model.addAttribute("message", "Reservation canceled successfully.");
-        } else {
-            model.addAttribute("message", "Failed to cancel reservation.");
+        if (userId == null) {
+            return "redirect:/login";  // Redirect to login if user is not authenticated
         }
-        return "redirect:/" + wishlistId; // Redirect to the wishlist after cancellation
+
+        // Attempt to cancel the reservation
+        boolean isCanceled = service.cancelReservation(presentId, userId);
+
+        // Get the wishlist ID for this present
+        Integer wishlistId = service.getWishlistIdByPresentId(presentId);
+        if (wishlistId == null) {
+            return "redirect:/overview";  // Redirect to an error page if wishlistId is not found
+        }
+
+        // Redirect to the wishlist page, invoking getWishlist to refresh the status
+        return "redirect:/" + wishlistId;
     }
 
     /*@GetMapping("/create_wishlist")
