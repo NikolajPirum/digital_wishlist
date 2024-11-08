@@ -15,41 +15,43 @@
         <th> Name </th>
         <th> Link </th>
         <th> Price </th>
-        <th>  </th>
+        <th> Status </th>
+        <th> Actions </th>
     </tr>
     </thead>
 
     <tbody>
-    <tr th:each="wish : ${presents}" >
+    <tr th:each="entry : ${presentWithStatus}">
+        <td><span th:text="${entry.key.name}"></span></td>
+        <td><a th:href="${entry.key.link}" th:text="${entry.key.link}"></a></td>
+        <td><span th:text="${entry.key.price}"></span></td>
 
+        <!-- Status based on reservation status in presentWithStatus map -->
         <td>
-            <a th:text="${wish.name}"></a>
+            <span th:if="${entry.value}" th:text="'Reserved'"></span>
+            <span th:if="${!entry.value}" th:text="'Available'"></span>
         </td>
 
+        <!-- Action buttons for reserve and cancel reservation -->
         <td>
-            <a th:text="${wish.link}"></a>
-        </td>
+            <form th:if="${!entry.value}" th:action="@{/reserve}" method="post">
+                <input type="hidden" name="presentId" th:value="${entry.key.id}">
+                <button type="submit">Reserve</button>
+            </form>
 
-        <td>
-            <a th:text="${wish.price}"></a>
+            <form th:if="${entry.value}" th:action="@{/cancel-reservation}" method="post">
+                <input type="hidden" name="presentId" th:value="${entry.key.id}">
+                <button type="submit">Cancel Reservation</button>
+            </form>
         </td>
-
-        <td>
-        <form th:action="@{'/' + ${wishlist.id} + '/delete'}" method="POST">
-            <input type="submit" value="Delete wish">
-        </form>
-        </td>
-
     </tr>
     </tbody>
 </table>
 
-<!-- Tilbage til listen over attraktioner -->
 <a href="/overview">Back to the overview</a>
-<form th:action="@{'/create_wish'}" method="GET">
+<form th:action="@{/create_wish}" method="GET">
     <input type="submit" value="Add a wish to wishlist">
 </form>
-
 
 </body>
 </html>

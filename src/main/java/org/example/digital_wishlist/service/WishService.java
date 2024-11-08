@@ -32,13 +32,11 @@ public class WishService {
     }
 
     public Wishlist getWishList(int id){
-
         return repository.getWishlist(id);
-
     }
 
     public List<Present> getPresentsByWishId(int id){
-        return repository.getPresentsByWishlistId(id);
+        return repository.getPresentsByWishListId(id);
     }
 
     public void addWish(Present present){
@@ -78,6 +76,18 @@ public class WishService {
 
     public boolean cancelReservation(int presentId, int userId) {
         return repository.cancelReservation(presentId, userId);
+    }
+
+
+    public List<Present> getPresents(int id) {
+       return repository.getPresents(id);
+    }
+
+    public List<Integer> getReservedPresentIds(int id) {
+        return repository.getReservedPresentIds(id);
+    }
+    public Integer getWishlistIdByPresentId(int presentId) {
+        return repository.getWishlistIdByPresentId(presentId);  // Call the repository method
     }
 
 }

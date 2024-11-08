@@ -41,8 +41,9 @@ CREATE TABLE Reserve (
                          PresentID INTEGER,
                          UserID INTEGER,
                          PRIMARY KEY(ReserveID),
-                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID) ON DELETE CASCADE,
-                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
+                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID),
+                         CONSTRAINT unique_reservation UNIQUE (PresentID, UserID)
 );
 
 -- Insert data into AppUser table
