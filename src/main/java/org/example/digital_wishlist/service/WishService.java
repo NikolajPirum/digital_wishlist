@@ -64,8 +64,9 @@ public class WishService {
         return repository.findUserById(id);
     }
 
-    public void createWishlist(Wishlist wishlist){
+    public void createWishlist(Wishlist wishlist, int userId){
         repository.createWishlist(wishlist);
+        wishlist.setUserID(userId);
     }
 
 

@@ -66,8 +66,8 @@ public class WishRepository {
 
     public void createWishlist(Wishlist wishlist){
         // code to createWishlist
-        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
-        jdbcTemplate.update(query, wishlist.getListName());
+        String query = "INSERT INTO wishlist(Wishlistname, UserID) VALUES (?, ?)";
+        jdbcTemplate.update(query, wishlist.getListName(), wishlist.getUserID());
     }
 
     public List<Present> getPresentsByWishListId(int id){

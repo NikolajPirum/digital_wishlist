@@ -198,8 +198,20 @@ public class WishController {
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
         return "redirect:/" + wishlistId;
     }
+    @GetMapping("/create_wishlist")
+    public String createWishList(Model model, HttpSession session) {
+        model.addAttribute("wishlist", new Wishlist());
+        return "create_wishlist";
+    }
 
-    /*@GetMapping("/create_wishlist")
+    @PostMapping("/create_wishlist")
+    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
+        service.createWishlist(wishlist);
+        model.addAttribute("success", true);
+        return "redirect:/overview";
+    }
+/*
+    @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
