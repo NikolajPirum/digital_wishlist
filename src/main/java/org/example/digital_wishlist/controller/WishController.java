@@ -236,25 +236,27 @@ public class WishController {
         model.addAttribute("presents", presents);
         return"updateWishlist";
     }
-    @GetMapping("/{id}/editPresent")
-    public String showPresentUpdateForm(@PathVariable("id") int id, Model model){
-        List<Present> presents = service.getPresentsByWishId(id);
-
-        model.addAttribute("UpdatePresent", presents);
-        return "updatePresent";
-    }
-
-    @PostMapping("/update/presentName")
-    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
-        service.updatePresent(present);
-        model.addAttribute("updatedPresentName", present.getName());
-        return "redirect:/overview";
-    }
-
     @PostMapping("/update/wishlist")
     public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
         service.updateWishlist(wishlist);
         model.addAttribute("updatedWishlistName", wishlist.getListName());
+        return "redirect:/overview";
+    }
+
+    @GetMapping("/editPresent/{id}")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
+        Present present = service.getPresentById(id);
+        model.addAttribute("present", present);
+        return "updatePresent";
+    }
+
+    @PostMapping("/update/present")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+        Present updatedPresent = service.updatePresent(present);
+        model.addAttribute("updatedPresentName", updatedPresent.getPresentName());
+        model.addAttribute("updatedPresentPrice", updatedPresent.getPrice());
+        model.addAttribute("updatedPresentLink", updatedPresent.getLink());
+
         return "redirect:/overview";
     }
 

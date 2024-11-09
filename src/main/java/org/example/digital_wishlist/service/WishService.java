@@ -96,4 +96,9 @@ public class WishService {
         repository.updatePresent(present);
         return present;
     }
+
+    public Present getPresentById(int id) {
+        Present present = repository.getPresentById(id);
+        return present;
+    }
 }

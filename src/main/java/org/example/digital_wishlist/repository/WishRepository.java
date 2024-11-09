@@ -57,7 +57,7 @@ public class WishRepository {
     // skal også have link i databasen
     public void addWish(Present present){
         String query = "insert into Present (Presentname,Price,Link, Brand, WishlistID) values (?, ?, ?,?,?)";
-        jdbcTemplate.update(query, present.getName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
+        jdbcTemplate.update(query, present.getPresentName(), present.getPrice(), present.getLink(), present.getBrand(), present.getWishListId());
     }
 
     public List<Wishlist> getAllWishLists(){
@@ -83,7 +83,7 @@ public class WishRepository {
 
     public int updateWishlist(Wishlist wishlist) {
         String query = "UPDATE Wishlist SET name =? WHERE wishlist_id =?";
-        //returnere int, som er antallet af rækker, der blev påvirket af forespørgslen
+        //returnere int int er antallet af rækker, der blev påvirket af forespørgslen
         return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
     }
 
@@ -93,8 +93,13 @@ public class WishRepository {
     }
 
     public int updatePresent(Present present) {
-        String query = "UPDATE Present SET name =? WHERE present_id = ?";
-        return jdbcTemplate.update(query, present.getName(), present.getId());
+        String query = "UPDATE Present SET Presentname =?, Price =?, Link =? WHERE PresentID= ?";
+        return jdbcTemplate.update(query,
+                present.getPresentName(),
+                present.getPrice(),
+                present.getLink(),
+                present.getId()
+        );
     }
 
     public Wishlist findWishlistByUsername(User user, Wishlist wishlist) {
@@ -103,7 +108,7 @@ public class WishRepository {
     }
     public int updateNameOnPresent(Present present){
         String query = "UPDATE Present SET name = ? WHERE PresentId = ?";
-        return jdbcTemplate.update(query, present.getName(), present.getId());
+        return jdbcTemplate.update(query, present.getPresentName(), present.getId());
     }
 
     public Wishlist getWishlist(int id){
@@ -190,7 +195,7 @@ public class WishRepository {
         return jdbcTemplate.query(sql, new Object[]{wishlistId}, (rs, rowNum) -> {
             Present present = new Present();
             present.setId(rs.getInt("id"));
-            present.setName(rs.getString("name"));
+            present.setPresentName(rs.getString("name"));
             present.setLink(rs.getString("link"));
             present.setPrice(rs.getInt("price"));
             present.setBrand(rs.getString("brand"));
@@ -213,5 +218,10 @@ public class WishRepository {
             System.err.println("Present ID " + presentId + " does not exist.");
             return null;
         }
+    }
+
+    public Present getPresentById(int id) {
+        String query = "SELECT * FROM Present WHERE PresentID = ?";
+        return jdbcTemplate.queryForObject(query, presentRowMapper, id);
     }
 }
