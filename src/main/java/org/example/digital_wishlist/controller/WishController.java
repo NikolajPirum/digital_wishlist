@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.StyleSheet;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,9 +22,11 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
+    private final WishService wishService;
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishService wishService) {
         this.service = service;
+        this.wishService = wishService;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -199,16 +203,21 @@ public class WishController {
         return "redirect:/" + wishlistId;
     }
     @GetMapping("/create_wishlist")
-    public String createWishList(Model model, HttpSession session) {
+    public String createWishList(Model model) {
         model.addAttribute("wishlist", new Wishlist());
         return "create_wishlist";
     }
 
     @PostMapping("/create_wishlist")
-    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
-        service.createWishlist(wishlist);
-        model.addAttribute("success", true);
-        return "redirect:/overview";
+    public String createWishlist(@ModelAttribute Wishlist wishlist, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId != null) {
+            wishlist.setUserID(userId);
+            wishService.createWishlist(wishlist, userId);
+            return "redirect:/overview";
+        } else {
+            return "redirect:/login";
+        }
     }
 /*
     @GetMapping("/create_wishlist")
