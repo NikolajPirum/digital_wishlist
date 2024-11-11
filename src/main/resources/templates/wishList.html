@@ -48,8 +48,8 @@
     </tbody>
 </table>
 
+<a href="/overview">Back to the overview</a>
 <div th:if="${currentUserId == wishlistOwnerId}">
-    <a href="/overview">Back to the overview</a>
     <form th:action="@{/create_wish}" method="GET">
         <input type="submit" value="Add a wish to wishlist">
     </form>
