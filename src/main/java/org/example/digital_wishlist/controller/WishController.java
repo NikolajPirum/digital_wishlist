@@ -31,9 +31,13 @@ public class WishController {
     }
 */
     @GetMapping("/overview")
-    public String overview(Model model) {
+    public String overview(Model model,HttpSession session) {
         List<Wishlist> wishlists = service.getAllWishLists();
-
+        Integer currentUserId = (Integer) session.getAttribute("userId");
+        if (currentUserId == null) {
+            // Redirect or handle if the user is not logged in
+            return "redirect:/login";
+        }
         model.addAttribute("wishlists", wishlists);
 
         return "wishListSite";
