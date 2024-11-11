@@ -107,7 +107,7 @@ public class WishRepository {
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, user.getUsername());
     }
     public int updateNameOnPresent(Present present){
-        String query = "UPDATE Present SET name = ? WHERE PresentId = ?";
+        String query = "UPDATE Present SET PresentName = ? WHERE PresentId = ?";
         return jdbcTemplate.update(query, present.getPresentName(), present.getId());
     }
 

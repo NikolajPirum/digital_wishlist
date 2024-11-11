@@ -41,7 +41,7 @@ public class WishController {
 
     // problemer med status i present (reserve)
     @GetMapping("/{id}")
-    public String getWishlist(@PathVariable int id, Model model) {
+    public String getWishlist(@PathVariable int id, Model model, HttpSession session) {
         // Fetch wishlist and presents for the specified wishlist ID
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
@@ -60,7 +60,13 @@ public class WishController {
             boolean isReserved = reservedPresentIds.contains(present.getId());
             presentWithStatus.put(present, isReserved); // Store Present with its reservation status
         }
-
+        Integer currentUserId = (Integer) session.getAttribute("userId");
+        if (currentUserId == null) {
+            // Redirect or handle if the user is not logged in
+            return "redirect:/login";
+        }
+        model.addAttribute("currentUserId", currentUserId);
+        model.addAttribute("wishlistOwnerId",id);
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
@@ -231,10 +237,7 @@ public class WishController {
         service.createWishlist(wishlistName, userId);
     }
     */
-    public void readWishlist(){
-        // code to readWishlist
-    }
-
+    /*
     @GetMapping("/editWishlist/{id}")
     public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
         Wishlist wishlist = service.getWishList(id);
@@ -242,7 +245,7 @@ public class WishController {
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presents", presents);
         return"updateWishlist";
-    }
+    }*/
     @PostMapping("/update/wishlist")
     public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
         service.updateWishlist(wishlist);
