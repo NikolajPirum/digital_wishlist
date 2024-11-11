@@ -27,8 +27,7 @@ public class WishRepository {
 
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistId"),
-            rs.getString("Wishlistname"),
-            rs.getString("UserName")
+            rs.getString("Wishlistname")
     );
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
@@ -61,7 +60,7 @@ public class WishRepository {
     }
 
     public List<Wishlist> getAllWishLists(){
-        String query = "select * from wishlist";
+        String query = "select * from WishList";
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
 

@@ -228,7 +228,7 @@ public class WishController {
         // code to readWishlist
     }
 
-    @GetMapping("/{id}/editWishlist")
+    @GetMapping("/editWishlist/{id}")
     public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = wishlist.getPresentList();
@@ -247,15 +247,14 @@ public class WishController {
     public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
         Present present = service.getPresentById(id);
         model.addAttribute("present", present);
-        return "updatePresent";
+        return "update_present";
     }
 
     @PostMapping("/update/present")
     public String updatePresent(@ModelAttribute ("present") Present present, Model model){
-        Present updatedPresent = service.updatePresent(present);
-        model.addAttribute("updatedPresentName", updatedPresent.getPresentName());
-        model.addAttribute("updatedPresentPrice", updatedPresent.getPrice());
-        model.addAttribute("updatedPresentLink", updatedPresent.getLink());
+      service.updatePresent(present);
+
+        model.addAttribute("present", present);
 
         return "redirect:/overview";
     }
