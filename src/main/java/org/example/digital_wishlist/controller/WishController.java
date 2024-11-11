@@ -24,21 +24,14 @@ public class WishController {
     public WishController(WishService service) {
         this.service = service;
     }
-    /*
+/*
     @GetMapping("/favicon.ico")
     public void favicon() {
         // Do nothing or log the request if needed
     }
-
-     */
-
+*/
     @GetMapping("/overview")
-    public String overview(Model model, HttpSession session) {
-        //Checks if someone is logged in, incase they arent they are returned to homepage.
-        //alternative we can use it for showing a page when someone isnt logged in.
-        // if (session.getAttribute("userID") == null) {
-        //    return "redirect:/login";
-        //}
+    public String overview(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
 
         model.addAttribute("wishlists", wishlists);
@@ -71,11 +64,8 @@ public class WishController {
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
+
     }
-
-
-
-
 
 
     // form for adding a new wish
@@ -130,8 +120,7 @@ public class WishController {
         model.addAttribute("success", true);
         return "create_user";
 
-    }
-    @GetMapping("/login")
+    }@GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "login";
@@ -231,6 +220,7 @@ public class WishController {
         model.addAttribute("success", true);
         return "redirect:/overview";
     }
+
     /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
@@ -240,6 +230,47 @@ public class WishController {
 
         service.createWishlist(wishlistName, userId);
     }
+    */
+    public void readWishlist(){
+        // code to readWishlist
+    }
 
-     */
+    @GetMapping("/editWishlist/{id}")
+    public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = wishlist.getPresentList();
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return"updateWishlist";
+    }
+    @PostMapping("/update/wishlist")
+    public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
+        service.updateWishlist(wishlist);
+        model.addAttribute("updatedWishlistName", wishlist.getListName());
+        return "redirect:/overview";
+    }
+
+    @GetMapping("/editPresent/{id}")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
+        Present present = service.getPresentById(id);
+        model.addAttribute("present", present);
+        return "update_present";
+    }
+
+    @PostMapping("/update/present")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+      service.updatePresent(present);
+
+        model.addAttribute("present", present);
+
+        return "redirect:/overview";
+    }
+
+    public void deleteUser(){
+        // code to deleteUser
+    }
+
+    public void deleteWishlist(){
+        // code to deleteWishlist
+    }
 }
