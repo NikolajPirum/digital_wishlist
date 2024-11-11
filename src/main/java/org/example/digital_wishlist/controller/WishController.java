@@ -24,14 +24,12 @@ public class WishController {
     public WishController(WishService service) {
         this.service = service;
     }
-    /*
+/*
     @GetMapping("/favicon.ico")
     public void favicon() {
         // Do nothing or log the request if needed
     }
-
-     */
-
+*/
     @GetMapping("/overview")
     public String overview(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
@@ -68,10 +66,6 @@ public class WishController {
         return "wishList";
 
     }
-
-
-
-
 
     // form for adding a new wish
     @GetMapping("create_wish")
@@ -131,7 +125,7 @@ public class WishController {
         return "login";
     }
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
+    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) throws InterruptedException {
         User foundUser = service.findUser(user.getUsername());
 
         if (foundUser != null) {
@@ -142,9 +136,11 @@ public class WishController {
 
         // Check for password match
         if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            // Store user ID in session
             session.setAttribute("userId", foundUser.getId());
             return "redirect:/overview";
         } else {
+            // Add an error message and reload the login page if credentials are incorrect
             model.addAttribute("error", "Wrong Password or Username");
             return "login";
         }
@@ -199,11 +195,13 @@ public class WishController {
         return "redirect:/" + wishlistId;
     }
 
-    /*@GetMapping("/create_wishlist")
+   /*
+    @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
+    */
 
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
@@ -211,15 +209,61 @@ public class WishController {
         model.addAttribute("success", true);
         return "redirect:/overview";
     }
+
     /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
         String username = principal.getName();
         User user = service.findUser(username);
+    }
 
 
         service.createWishlist(wishlistName, userId);
+        */
+    public void readUser(){
+        // code to readUser
     }
 
-     */
+    public void readWishlist(){
+        // code to readWishlist
+    }
+
+    @GetMapping("/editWishlist/{id}")
+    public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = wishlist.getPresentList();
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return"updateWishlist";
+    }
+    @PostMapping("/update/wishlist")
+    public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
+        service.updateWishlist(wishlist);
+        model.addAttribute("updatedWishlistName", wishlist.getListName());
+        return "redirect:/overview";
+    }
+
+    @GetMapping("/editPresent/{id}")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
+        Present present = service.getPresentById(id);
+        model.addAttribute("present", present);
+        return "update_present";
+    }
+
+    @PostMapping("/update/present")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+      service.updatePresent(present);
+
+        model.addAttribute("present", present);
+
+        return "redirect:/overview";
+    }
+
+    public void deleteUser(){
+        // code to deleteUser
+    }
+
+    public void deleteWishlist(){
+        // code to deleteWishlist
+    }
 }
