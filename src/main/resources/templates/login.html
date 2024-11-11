@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
-    <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
+    <link rel="stylesheet" th:href="@{/CSS/login.css}">
 </head>
 <body>
 
 
-    <form th:action="@{/login}" method = "post" th:object="${user}">
+    <form th:action="@{/login}" method="POST" th:object="${user}">
         <h2> Login page</h2>
         <div>
             <label for="username">Username:</label>
@@ -21,5 +21,8 @@
         <button type="submit"> Login</button>
         <p th:if="${error}" style="color:red">Error Wrong Username or Password.</p>
     </form>
+    <from th:action="@{/logout}" method ="POST">
+        <input type="submit" value="Create new user">
+    </from>
 </body>
 </html>

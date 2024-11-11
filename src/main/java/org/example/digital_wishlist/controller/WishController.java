@@ -33,7 +33,12 @@ public class WishController {
      */
 
     @GetMapping("/overview")
-    public String overview(Model model) {
+    public String overview(Model model, HttpSession session) {
+        //Checks if someone is logged in, incase they arent they are returned to homepage.
+        //alternative we can use it for showing a page when someone isnt logged in.
+        // if (session.getAttribute("userID") == null) {
+        //    return "redirect:/login";
+        //}
         List<Wishlist> wishlists = service.getAllWishLists();
 
         model.addAttribute("wishlists", wishlists);
