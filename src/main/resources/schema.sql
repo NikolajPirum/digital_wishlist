@@ -10,7 +10,7 @@ CREATE TABLE AppUser (
                          Password VARCHAR(30),
                          Email VARCHAR(50),
                          PRIMARY KEY(UserID)
-    -- This column will hold foreign key
+                         -- This column will hold foreign key
 );
 
 -- Create WishList table

@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
-    <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
+    <link rel="stylesheet" th:href="@{/CSS/login.css}">
 </head>
 <body>
 
-
-    <form th:action="@{/login}" method = "post" th:object="${user}">
-        <h2> Login page</h2>
+<div class="form-container">
+    <!-- Login Form -->
+    <form id="login-form" th:action="@{/login}" method="POST" th:object="${user}">
+        <h2>Login Page</h2>
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" th:field="*{username}" required />
@@ -18,8 +19,15 @@
             <label for="password">Password:</label>
             <input type="password" id="password" th:field="*{password}" required />
         </div>
-        <button type="submit"> Login</button>
-        <p th:if="${error}" style="color:red">Error Wrong Username or Password.</p>
+        <button type="submit">Login</button>
+        <p th:if="${error}" style="color:red">Error: Wrong Username or Password.</p>
     </form>
+
+    <!-- Create New User Form -->
+    <form id="create-user-form" th:action="@{/create_user}" method="POST">
+        <input type="submit" value="Create new user">
+    </form>
+</div>
+
 </body>
 </html>

@@ -67,6 +67,7 @@ public class WishController {
 
     }
 
+
     // form for adding a new wish
     @GetMapping("create_wish")
     public String showAddWishForm(Model model){
@@ -124,26 +125,38 @@ public class WishController {
         model.addAttribute("user", new User());
         return "login";
     }
+
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) throws InterruptedException {
-        User foundUser = service.findUser(user.getUsername());
+    public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
+        try {
+            User foundUser = service.findUser(user.getUsername());
 
-        if (foundUser != null) {
-            System.out.println("Found user: " + foundUser.getUsername() + " with ID: " + foundUser.getId());
-        } else {
-            System.out.println("No user found with username: " + user.getUsername());
-        }
+            if (foundUser == null) {
+                model.addAttribute("error", "User not found.");
+                return "login";
+            }
 
-        // Check for password match
-        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
-            // Store user ID in session
+            if (!foundUser.getPassword().equals(user.getPassword())) {
+                model.addAttribute("error", "Wrong password.");
+                return "login";
+            }
+
+            // Store user ID in session and redirect to overview page
             session.setAttribute("userId", foundUser.getId());
             return "redirect:/overview";
-        } else {
-            // Add an error message and reload the login page if credentials are incorrect
-            model.addAttribute("error", "Wrong Password or Username");
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the stack trace for debugging
+            model.addAttribute("error", "An unexpected error occurred. Please try again.");
             return "login";
         }
+    }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login";
     }
     @GetMapping("/favicon.ico")
     @ResponseBody
@@ -194,15 +207,13 @@ public class WishController {
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
         return "redirect:/" + wishlistId;
     }
-
-   /*
+        /*
     @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
     */
-
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
         service.createWishlist(wishlist);
@@ -215,15 +226,11 @@ public class WishController {
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
         String username = principal.getName();
         User user = service.findUser(username);
-    }
 
 
         service.createWishlist(wishlistName, userId);
-        */
-    public void readUser(){
-        // code to readUser
     }
-
+    */
     public void readWishlist(){
         // code to readWishlist
     }
