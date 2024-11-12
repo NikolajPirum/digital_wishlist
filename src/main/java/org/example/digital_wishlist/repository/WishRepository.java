@@ -87,6 +87,11 @@ public class WishRepository {
         return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
     }
 
+    public List<Wishlist> getWishlistByUserId(int id){
+        String query = "select * from wishlist where UserID = ?";
+        return jdbcTemplate.query(query,wishlistRowMapper, id);
+    }
+
     public List<Present> getPresentsByWishListId(int id){
         String query = "select * from present where WishlistID = ?";
         return jdbcTemplate.query(query, presentRowMapper, id);
@@ -107,7 +112,7 @@ public class WishRepository {
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, user.getUsername());
     }
     public int updateNameOnPresent(Present present){
-        String query = "UPDATE Present SET name = ? WHERE PresentId = ?";
+        String query = "UPDATE Present SET PresentName = ? WHERE PresentId = ?";
         return jdbcTemplate.update(query, present.getPresentName(), present.getId());
     }
 
@@ -158,7 +163,6 @@ public class WishRepository {
             return false;
         }
     }
-
 
     public boolean cancelReservation(int presentId, int userId) {
         String sql = "DELETE FROM reserve WHERE presentid = ? AND userid = ?";

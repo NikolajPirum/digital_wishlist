@@ -2,39 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>WishList Site</title>
-    <link rel="stylesheet" th:href="@{/CSS/wishListSite.css}">
-
+    <link rel="stylesheet" th:href="@{/CSS/personalWishListSite.css}">
 </head>
 <body>
 
 <header>
-    <h1>Admin Wishlist Overview </h1>
-
+    <h1>My Wishlists </h1>
     <h3>Here is an overview of your different wishlists</h3>
 </header>
-<section>
-    <a th:href="@{/create_wishlist}">
-        <button type="button">Create New Wishlist</button>
-    </a>
-</section>
+
+<div class="menubar">
+    <ul>
+        <li><a href="/overview/noaccess"> Wishlists</a></li>
+        <li><a href="/create_wish">New Wish</a></li>
+        <li><a href="/create_wishlist">New Wishlist</a></li>
+    </ul>
+</div>
+
 <ul>
     <li th:each="wishlist : ${wishlists}">
         <a th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></a>
 
-        <form th:action="@{'/' + ${wishlist.listName} + '/deletebyname'}" method="POST">
+        <form th:action="@{'/' + ${wishlist.listName} + '/delete'}" method="POST">
             <input type="submit" value="Delete wishlist">
         </form>
 
-        <form th:action="@{'/' + ${wishlist.listName} + '/update'}" method="POST">
+        <form th:action="@{'/' + ${userID}}" method="GET">
             <input type="submit" value="Update wishlist">
         </form>
 
-
+    </li>
 </ul>
-
-<form th:action="@{/logout}" method ="GET">
-    <input type="submit" value="logout">
-</form>
 
 </body>
 </html>

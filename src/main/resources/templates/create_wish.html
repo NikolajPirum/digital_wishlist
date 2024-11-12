@@ -2,22 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Wish</title>
+    <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
 </head>
 <body>
-<h1> Add a Wish to a wishlist</h1>
+
+<div class="menubar">
+    <ul>
+        <li><a href="/overview/noaccess"> Back to wishlists</a></li>
+        <li><a href="#">New Wishlist</a></li>
+    </ul>
+</div>
+
 <form th:action="@{/create_wish}" th:object="${present}" method="post">
-
+    <h2> Add a Wish to a wishlist</h2>
     <div>
-        <label>Name:</label>
-        <input id="name" type="text" th:field="*{name}" required >
+        <label>Present Name:</label>
+        <input id="presentName" type="text" th:field="*{presentName}" required>
     </div>
-
 
     <div>
         <label>Link:</label>
-        <input id="link" type="text" th:field="*{link}" >
+        <input id="link" type="text" th:field="*{link}">
     </div>
-
 
     <div>
         <label>Price:</label>
@@ -26,18 +32,16 @@
 
     <div>
         <label>Brand:</label>
-        <input id="brand" type="text" th:field="*{brand}" >
+        <input id="brand" type="text" th:field="*{brand}">
     </div>
 
     <div>
         <label>Add to a wishlist:</label>
         <select th:field="*{wishListId}" required>
-            <option value="" disabled selected>Select a Wishlist</option>
             <option th:each="wishList : ${wishlists}"
                     th:value="${wishList.id}"
-                    th:text="${wishList.listName}"
-            ></option>
-
+                    th:text="${wishList.listName}">
+            </option>
         </select>
     </div>
     <button type="submit">Add wish</button>
