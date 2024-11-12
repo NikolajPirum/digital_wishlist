@@ -116,7 +116,7 @@ public class WishController {
     public String addWish(@ModelAttribute Present present){
         service.addWish(present);
 
-        return "redirect:/overview";
+        return "redirect:/overview/noaccess";
     }
 
     @PostMapping("/{id}/delete")
@@ -124,7 +124,7 @@ public class WishController {
         int deletedRows = service.deleteWish(id);
 
         if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
-            return "redirect:/overview";
+            return "redirect:/overview/noaccess";
         }else{
             return "wishList";
         }
@@ -157,6 +157,7 @@ public class WishController {
         List<Wishlist> wishlists = service.getWishlistByUserId(userId);
 
         model.addAttribute("wishlists", wishlists);
+        model.addAttribute("userID", userId);
         return "personalWishListSite";
     }
 
@@ -220,7 +221,7 @@ public class WishController {
         // Get the wishlist ID for this present
         Integer wishlistId = service.getWishlistIdByPresentId(presentId);
         if (wishlistId == null) {
-            return "redirect:/overview";  // Redirect to an error page if wishlistId is not found
+            return "redirect:/overview/noaccess";  // Redirect to an error page if wishlistId is not found
         }
 
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
@@ -258,7 +259,7 @@ public class WishController {
         if (userId != null) {
             wishlist.setUserID(userId);
             service.createWishlist(wishlist, userId);
-            return "redirect:/overview";
+            return "redirect:/overview/noaccess";
         } else {
             return "redirect:/login";
         }

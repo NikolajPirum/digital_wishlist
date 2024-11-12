@@ -15,7 +15,7 @@
     <ul>
         <li><a href="/overview/noaccess"> Wishlists</a></li>
         <li><a href="/create_wish">New Wish</a></li>
-        <li><a href="#">New Wishlist</a></li>
+        <li><a href="/create_wishlist">New Wishlist</a></li>
     </ul>
 </div>
 
@@ -27,7 +27,7 @@
             <input type="submit" value="Delete wishlist">
         </form>
 
-        <form th:action="@{'/' + ${wishlist.listName} + '/update'}" method="POST">
+        <form th:action="@{'/' + ${userID}}" method="GET">
             <input type="submit" value="Update wishlist">
         </form>
 
