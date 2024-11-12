@@ -8,16 +8,14 @@
 <form th:action="@{/create_wish}" th:object="${present}" method="post">
 
     <div>
-        <label>Name:</label>
-        <input id="name" type="text" th:field="*{name}" required >
+        <label>Present Name:</label>
+        <input id="presentName" type="text" th:field="*{presentName}" required>
     </div>
-
 
     <div>
         <label>Link:</label>
-        <input id="link" type="text" th:field="*{link}" >
+        <input id="link" type="text" th:field="*{link}">
     </div>
-
 
     <div>
         <label>Price:</label>
@@ -26,22 +24,19 @@
 
     <div>
         <label>Brand:</label>
-        <input id="brand" type="text" th:field="*{brand}" >
+        <input id="brand" type="text" th:field="*{brand}">
     </div>
 
     <div>
         <label>Add to a wishlist:</label>
         <select th:field="*{wishListId}" required>
-            <option value="" disabled selected>Select a Wishlist</option>
             <option th:each="wishList : ${wishlists}"
                     th:value="${wishList.id}"
-                    th:text="${wishList.listName}"
-            ></option>
-
+                    th:text="${wishList.listName}">
+            </option>
         </select>
     </div>
     <button type="submit">Add wish</button>
 </form>
-
 </body>
 </html>

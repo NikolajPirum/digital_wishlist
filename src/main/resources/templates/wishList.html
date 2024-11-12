@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>WishList</title>
+    <link rel="stylesheet" th:href="@{/CSS/wishlistcss.css}">
 </head>
 <body>
 
@@ -28,9 +29,10 @@
 
         <!-- Only show status if the current user is not the owner -->
         <td th:if="${currentUserId != wishlistOwnerId}">
-            <span th:if="${entry.value}" th:text="'Reserved'"></span>
-            <span th:if="${!entry.value}" th:text="'Available'"></span>
+            <span th:if="${entry.value}" th:text="'Reserved'" class="status reserved"></span>
+            <span th:if="${!entry.value}" th:text="'Available'" class="status available"></span>
         </td>
+
 
         <!-- Only show actions if the current user is not the owner -->
         <td th:if="${currentUserId != wishlistOwnerId}">

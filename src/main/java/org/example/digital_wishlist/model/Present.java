@@ -1,7 +1,7 @@
 package org.example.digital_wishlist.model;
 
 public class Present {
-    private int id;
+    private Integer id;
     private String presentName;
     private int price;
     private String link;
