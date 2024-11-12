@@ -8,6 +8,8 @@ public class Wishlist {
     private ArrayList<Present> PresentList = new ArrayList<>();
     private boolean reserv = false;
     private int userId;
+    private String userName;
+
 
     public Wishlist(String listName, ArrayList<Present> PresentList, boolean isReserv) {
         this.listName = listName;
@@ -27,6 +29,11 @@ public class Wishlist {
     }
     public Wishlist(){
 
+    }
+    public Wishlist(int wishlistId, String listName, String userName){
+        this.listName = listName;
+        this.wishlistID = wishlistId;
+        this.userName = userName;
     }
     public int getWishlistID() {return wishlistID;}
 

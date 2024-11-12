@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opdater Gave</title>
+    <link rel = "stylesheet" th:href="@{/css/update_present.css}">
+</head>
+<body>
+<h1>Update gift</h1>
+
+<form th:action="@{/update/present}" method="post" th:object="${present}">
+    <input type ="hidden" th:field = "*{id}" />
+
+        <div class="form-group">
+            <label for="name"> Gave navn:</label>
+            <input type="text" th:field="*{presentName}" id="name" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Pris:</label>
+            <input type ="number" th:field="*{price}" id="price" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="link">Link:</label>
+            <input type="text" th:field="*{link}" id="link" />
+        </div>
+
+         <div class = "button-group">
+            <button type="submit" > Updater</button>
+            <a th:href="@{/overview}" class ="cancel-btn">Cancel</a>
+        </div>
+    </form>
+</body>
+</html>

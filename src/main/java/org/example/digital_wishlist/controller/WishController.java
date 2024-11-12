@@ -22,11 +22,9 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
-    private final WishService wishService;
 
-    public WishController(WishService service, WishService wishService) {
+    public WishController(WishService service) {
         this.service = service;
-        this.wishService = wishService;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -136,22 +134,35 @@ public class WishController {
     }
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
-        User foundUser = service.findUser(user.getUsername());
+        try {
+            User foundUser = service.findUser(user.getUsername());
 
-        if (foundUser != null) {
-            System.out.println("Found user: " + foundUser.getUsername() + " with ID: " + foundUser.getId());
-        } else {
-            System.out.println("No user found with username: " + user.getUsername());
-        }
+            if (foundUser == null) {
+                model.addAttribute("error", "User not found.");
+                return "login";
+            }
 
-        // Check for password match
-        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            if (!foundUser.getPassword().equals(user.getPassword())) {
+                model.addAttribute("error", "Wrong password.");
+                return "login";
+            }
+
+            // Store user ID in session and redirect to overview page
             session.setAttribute("userId", foundUser.getId());
             return "redirect:/overview";
-        } else {
-            model.addAttribute("error", "Wrong Password or Username");
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the stack trace for debugging
+            model.addAttribute("error", "An unexpected error occurred. Please try again.");
             return "login";
         }
+    }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login";
     }
     @GetMapping("/favicon.ico")
     @ResponseBody
@@ -213,7 +224,7 @@ public class WishController {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId != null) {
             wishlist.setUserID(userId);
-            wishService.createWishlist(wishlist, userId);
+            service.createWishlist(wishlist, userId);
             return "redirect:/overview";
         } else {
             return "redirect:/login";
@@ -241,6 +252,47 @@ public class WishController {
 
         service.createWishlist(wishlistName, userId);
     }
+    */
+    public void readWishlist(){
+        // code to readWishlist
+    }
 
-     */
+    @GetMapping("/editWishlist/{id}")
+    public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = wishlist.getPresentList();
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return"updateWishlist";
+    }
+    @PostMapping("/update/wishlist")
+    public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
+        service.updateWishlist(wishlist);
+        model.addAttribute("updatedWishlistName", wishlist.getListName());
+        return "redirect:/overview";
+    }
+
+    @GetMapping("/editPresent/{id}")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
+        Present present = service.getPresentById(id);
+        model.addAttribute("present", present);
+        return "update_present";
+    }
+
+    @PostMapping("/update/present")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+      service.updatePresent(present);
+
+        model.addAttribute("present", present);
+
+        return "redirect:/overview";
+    }
+
+    public void deleteUser(){
+        // code to deleteUser
+    }
+
+    public void deleteWishlist(){
+        // code to deleteWishlist
+    }
 }

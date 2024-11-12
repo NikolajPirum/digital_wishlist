@@ -60,7 +60,6 @@ public class WishService {
     }
 
     public User findUserById(int id){
-
         return repository.findUserById(id);
     }
 
@@ -69,10 +68,13 @@ public class WishService {
         repository.createWishlist(wishlist);
     }
 
-
-
     public boolean reservePresent(int presentId, int userId) {
         return repository.reservePresent(presentId, userId);
+    }
+
+    public Wishlist updateWishlist(Wishlist wishlist){
+        repository.updateWishlist(wishlist);
+        return wishlist;
     }
 
     public boolean cancelReservation(int presentId, int userId) {
@@ -91,4 +93,13 @@ public class WishService {
         return repository.getWishlistIdByPresentId(presentId);  // Call the repository method
     }
 
+    public Present updatePresent(Present present) {
+        repository.updatePresent(present);
+        return present;
+    }
+
+    public Present getPresentById(int id) {
+        Present present = repository.getPresentById(id);
+        return present;
+    }
 }
