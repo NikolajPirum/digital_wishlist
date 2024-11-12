@@ -205,13 +205,29 @@ public class WishRepository {
             return null;
         }
     }
-    public void deleteWishlist(int wishlistId) {
-        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
-        
-    }
-
     public Present getPresentById(int id) {
         String query = "SELECT * FROM Present WHERE PresentID = ?";
         return jdbcTemplate.queryForObject(query, presentRowMapper, id);
+    }
+    public Integer findWishlistByName(String listName){
+        String query = "SELECT WishlistID FROM Wishlist WHERE wishlistName = ?";
+        try{
+            return jdbcTemplate.queryForObject(query, Integer.class, listName);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Wishlist not found for name: " + listName);
+            return null;
+        }
+    }
+    public void deleteReserveByWishlistId(int wishlistId) {
+        String sql = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
+        jdbcTemplate.update(sql, wishlistId);
+    }
+    public void deletePresentByWishlistId(int wishlistId) {
+        String sql = "DELETE FROM Present WHERE WishlistID = ?";
+        jdbcTemplate.update(sql, wishlistId);
+    }
+    public void deleteWishlistById(int wishlistId) {
+        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        jdbcTemplate.update(sql, wishlistId);
     }
 }

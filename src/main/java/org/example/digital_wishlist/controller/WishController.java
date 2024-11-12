@@ -22,9 +22,11 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
+    private final WishService wishService;
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishService wishService) {
         this.service = service;
+        this.wishService = wishService;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -230,29 +232,6 @@ public class WishController {
             return "redirect:/login";
         }
     }
-/*
-    @GetMapping("/create_wishlist")
-    public String createWishList(Model model, HttpSession session) {
-        model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
-        return "create_wishlist";
-    }
-
-    @PostMapping("/create_wishlist")
-    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
-        service.createWishlist(wishlist);
-        model.addAttribute("success", true);
-        return "redirect:/overview";
-    }
-    /*
-    @PostMapping("/create_wishlist")
-    public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
-        String username = principal.getName();
-        User user = service.findUser(username);
-
-
-        service.createWishlist(wishlistName, userId);
-    }
-    */
     public void readWishlist(){
         // code to readWishlist
     }
@@ -291,8 +270,14 @@ public class WishController {
     public void deleteUser(){
         // code to deleteUser
     }
-
-    public void deleteWishlist(){
+    @PostMapping("/{listName}/deletebyname")
+    public String deleteWishlist(@PathVariable ("listName") String listName){
         // code to deleteWishlist
+        try {
+            wishService.deleteWishlist(listName);
+            return "redirect:/overview";
+        } catch (Exception e) {
+            return "Failed to delete wishlist. Error: " + e.getMessage();
+        }
     }
 }

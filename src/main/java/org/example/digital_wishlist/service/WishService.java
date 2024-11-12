@@ -105,4 +105,14 @@ public class WishService {
         Present present = repository.getPresentById(id);
         return present;
     }
+    public void deleteWishlist(String listName) {
+        Integer wishlistId = repository.findWishlistByName(listName);
+        if(wishlistId != null){
+            repository.deleteReserveByWishlistId(wishlistId);
+            repository.deletePresentByWishlistId(wishlistId);
+            repository.deleteWishlistById(wishlistId);
+        } else {
+            throw new IllegalArgumentException("Wishlist not found" + listName + "does not exist");
+        }
+    }
 }
