@@ -282,9 +282,7 @@ public class WishController {
     @PostMapping("/update/present")
     public String updatePresent(@ModelAttribute ("present") Present present, Model model){
       service.updatePresent(present);
-
         model.addAttribute("present", present);
-
         return "redirect:/overview";
     }
 
