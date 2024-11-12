@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
@@ -108,5 +109,18 @@ public class WishService {
     public Present getPresentById(int id) {
         Present present = repository.getPresentById(id);
         return present;
+    }
+    public void deleteWishlist(String listName) {
+        Integer wishlistId = repository.findWishlistByName(listName);
+        if(wishlistId != null){
+            repository.deleteReserveByWishlistId(wishlistId);
+            repository.deletePresentByWishlistId(wishlistId);
+            repository.deleteWishlistById(wishlistId);
+        } else {
+            throw new IllegalArgumentException("Wishlist not found" + listName + "does not exist");
+        }
+    }
+    public int findWishlistByName(String listName){
+        return repository.findWishlistByName(listName);
     }
 }

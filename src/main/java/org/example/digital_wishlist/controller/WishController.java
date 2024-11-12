@@ -204,10 +204,6 @@ public class WishController {
         // You can leave this method empty, or return an actual favicon if desired
     }
 
-
-
-
-
     @PostMapping("/reserve")
     public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -294,11 +290,19 @@ public class WishController {
         return "redirect:/overview";
     }
 
-    public void deleteUser(){
-        // code to deleteUser
-    }
-
-    public void deleteWishlist(){
+    @PostMapping("/{listName}/deletebyname")
+    public String deleteWishlist(@PathVariable ("listName") String listName, HttpSession session){
         // code to deleteWishlist
+        Integer userId = (int)session.getAttribute("userId");
+        Integer wishlistId = service.findWishlistByName(listName);
+        if(userId == wishlistId){
+            try {
+                service.deleteWishlist(listName);
+                return "redirect:/overview";
+            } catch (Exception e) {
+                return "Failed to delete wishlist. Error: " + e.getMessage();
+            }
+        }
+        return "redirect:/overview";
     }
 }
