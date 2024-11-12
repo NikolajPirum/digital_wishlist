@@ -223,15 +223,15 @@ public class WishRepository {
         }
     }
     public void deleteReserveByWishlistId(int wishlistId) {
-        String sql = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
-        jdbcTemplate.update(sql, wishlistId);
+        String query = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
+        jdbcTemplate.update(query, wishlistId);
     }
     public void deletePresentByWishlistId(int wishlistId) {
-        String sql = "DELETE FROM Present WHERE WishlistID = ?";
-        jdbcTemplate.update(sql, wishlistId);
+        String query = "DELETE FROM Present WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
     }
     public void deleteWishlistById(int wishlistId) {
-        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
-        jdbcTemplate.update(sql, wishlistId);
+        String query = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
     }
 }

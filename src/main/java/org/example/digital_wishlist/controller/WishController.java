@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
+import org.example.digital_wishlist.repository.WishRepository;
 import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +23,11 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
+    private final WishRepository wishRepository;
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishRepository wishRepository) {
         this.service = service;
+        this.wishRepository = wishRepository;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -294,8 +297,15 @@ public class WishController {
     public String deleteWishlist(@PathVariable ("listName") String listName, HttpSession session){
         // code to deleteWishlist
         Integer userId = (int)session.getAttribute("userId");
+        if(userId== null){
+            return "redirect:/login";
+        }
         Integer wishlistId = service.findWishlistByName(listName);
-        if(userId == wishlistId){
+        if(wishlistId != null){
+            Wishlist wishlist = wishRepository.findUserById(wishlistId);
+            if(wishlist != null && wishlist.getUserId().equals(userId)){
+
+            }
             try {
                 service.deleteWishlist(listName);
                 return "redirect:/overview";
