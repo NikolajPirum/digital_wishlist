@@ -185,7 +185,7 @@ public class WishController {
             return "redirect:/login";  // Redirect to login if user is not authenticated
         }
 
-        // Attempt to reserve the present
+        // reservePresent, adds the present to reserve list and returns a boolean.
         boolean isReserved = service.reservePresent(presentId, userId);
 
         // Get the wishlist ID for this present

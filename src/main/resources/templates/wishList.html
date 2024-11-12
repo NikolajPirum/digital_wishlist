@@ -44,6 +44,12 @@
                 <button type="submit">Cancel Reservation</button>
             </form>
         </td>
+        <td th:if="${currentUserId == wishlistOwnerId}">
+            <form th:action="@{/editPresent/{id}(id=${entry.key.id})}" method="GET">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+
     </tr>
     </tbody>
 </table>
@@ -54,6 +60,5 @@
         <input type="submit" value="Add a wish to wishlist">
     </form>
 </div>
-
 </body>
 </html>
