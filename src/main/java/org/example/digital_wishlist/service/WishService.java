@@ -26,6 +26,10 @@ public class WishService {
         repository.deleteUser(id);
     }
 
+    public List<Wishlist> getWishlistByUserId(int userId){
+        return repository.getWishlistByUserId(userId);
+    }
+
 
     public List<Wishlist> getAllWishLists(){
         return repository.getAllWishLists();
@@ -60,12 +64,16 @@ public class WishService {
     }
 
     public User findUserById(int id){
+
         return repository.findUserById(id);
     }
 
-    public void createWishlist(Wishlist wishlist){
+    public void createWishlist(Wishlist wishlist, int userId){
+        wishlist.setUserID(userId);
         repository.createWishlist(wishlist);
     }
+
+
 
     public boolean reservePresent(int presentId, int userId) {
         return repository.reservePresent(presentId, userId);

@@ -2,11 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Wish</title>
+    <link rel="stylesheet" th:href="@{/CSS/create_user.css}">
 </head>
 <body>
-<h1> Add a Wish to a wishlist</h1>
-<form th:action="@{/create_wish}" th:object="${present}" method="post">
 
+<div class="menubar">
+    <ul>
+        <li><a href="/overview/noaccess"> Back to wishlists</a></li>
+        <li><a href="#">New Wishlist</a></li>
+    </ul>
+</div>
+
+<form th:action="@{/create_wish}" th:object="${present}" method="post">
+    <h2> Add a Wish to a wishlist</h2>
     <div>
         <label>Present Name:</label>
         <input id="presentName" type="text" th:field="*{presentName}" required>
@@ -38,5 +46,6 @@
     </div>
     <button type="submit">Add wish</button>
 </form>
+
 </body>
 </html>

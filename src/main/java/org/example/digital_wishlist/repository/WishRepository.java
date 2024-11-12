@@ -67,8 +67,8 @@ public class WishRepository {
 
     public void createWishlist(Wishlist wishlist){
         // code to createWishlist
-        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
-        jdbcTemplate.update(query, wishlist.getListName());
+        String query = "INSERT INTO wishlist(Wishlistname, UserID) VALUES (?, ?)";
+        jdbcTemplate.update(query, wishlist.getListName(), wishlist.getUserID());
     }
 
     public List<Present> getPresentsByWishlistId(int id){
@@ -85,6 +85,11 @@ public class WishRepository {
         String query = "UPDATE Wishlist SET name =? WHERE wishlist_id =?";
         //returnere int int er antallet af rækker, der blev påvirket af forespørgslen
         return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
+    }
+
+    public List<Wishlist> getWishlistByUserId(int id){
+        String query = "select * from wishlist where UserID = ?";
+        return jdbcTemplate.query(query,wishlistRowMapper, id);
     }
 
     public List<Present> getPresentsByWishListId(int id){
@@ -159,7 +164,6 @@ public class WishRepository {
         }
     }
 
-
     public boolean cancelReservation(int presentId, int userId) {
         String sql = "DELETE FROM reserve WHERE presentid = ? AND userid = ?";
         int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
@@ -204,6 +208,10 @@ public class WishRepository {
             System.err.println("Present ID " + presentId + " does not exist.");
             return null;
         }
+    }
+    public void deleteWishlist(int wishlistId) {
+        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        
     }
 
     public Present getPresentById(int id) {
