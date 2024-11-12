@@ -10,11 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -233,5 +229,14 @@ public class WishRepository {
     public void deleteWishlistById(int wishlistId) {
         String query = "DELETE FROM Wishlist WHERE WishlistID = ?";
         jdbcTemplate.update(query, wishlistId);
+    }
+    public Integer findOwnerByWishlistId(Integer wishlistId) {
+        String query = "SELECT UserID FROM Wishlist WHERE WishlistID = ?";
+        try{
+            return jdbcTemplate.queryForObject(query, Integer.class, wishlistId);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Owner not found for WishlistID: " + wishlistId);
+            return null;
+        }
     }
 }

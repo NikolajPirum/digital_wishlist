@@ -65,7 +65,6 @@ public class WishService {
     }
 
     public User findUserById(int id){
-
         return repository.findUserById(id);
     }
 
@@ -110,17 +109,27 @@ public class WishService {
         Present present = repository.getPresentById(id);
         return present;
     }
-    public void deleteWishlist(String listName) {
+    public void deleteWishlist(String listName, int userId) {
         Integer wishlistId = repository.findWishlistByName(listName);
         if(wishlistId != null){
-            repository.deleteReserveByWishlistId(wishlistId);
-            repository.deletePresentByWishlistId(wishlistId);
-            repository.deleteWishlistById(wishlistId);
+            Wishlist wishlist = repository.getWishList(wishlistId);
+            if(wishlist.getUserID() == userId) {
+                repository.deleteReserveByWishlistId(wishlistId);
+                repository.deletePresentByWishlistId(wishlistId);
+                repository.deleteWishlistById(wishlistId);
+            } else{
+                throw new IllegalArgumentException("User not authorized to delete wishlist");
+            }
         } else {
             throw new IllegalArgumentException("Wishlist not found" + listName + "does not exist");
         }
     }
     public int findWishlistByName(String listName){
         return repository.findWishlistByName(listName);
+    }
+
+    public boolean isOwner(Integer userId, Integer wishlistId) {
+        Integer ownerId = repository.findOwnerByWishlistId(wishlistId);
+        return ownerId != null && ownerId.equals(userId);
     }
 }
