@@ -271,13 +271,18 @@ public class WishController {
         // code to deleteUser
     }
     @PostMapping("/{listName}/deletebyname")
-    public String deleteWishlist(@PathVariable ("listName") String listName){
+    public String deleteWishlist(@PathVariable ("listName") String listName, HttpSession session){
         // code to deleteWishlist
-        try {
-            wishService.deleteWishlist(listName);
-            return "redirect:/overview";
-        } catch (Exception e) {
-            return "Failed to delete wishlist. Error: " + e.getMessage();
+        Integer userId = (int)session.getAttribute("userId");
+        Integer wishlistId = service.findWishlistByName(listName);
+        if(userId == wishlistId){
+            try {
+                wishService.deleteWishlist(listName);
+                return "redirect:/overview";
+            } catch (Exception e) {
+                return "Failed to delete wishlist. Error: " + e.getMessage();
+            }
         }
+        return "redirect:/overview";
     }
 }

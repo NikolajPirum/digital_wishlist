@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
@@ -114,5 +115,8 @@ public class WishService {
         } else {
             throw new IllegalArgumentException("Wishlist not found" + listName + "does not exist");
         }
+    }
+    public int findWishlistByName(String listName){
+        return repository.findWishlistByName(listName);
     }
 }
