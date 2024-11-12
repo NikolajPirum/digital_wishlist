@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>WishList</title>
+    <title>WishList</title>
+    <link rel="stylesheet" th:href="@{/CSS/wishlistcss.css}">
 </head>
 <body>
 
@@ -10,48 +11,56 @@
 </header>
 
 <table>
-  <thead>
-  <tr>
-    <th> Name </th>
-    <th> Link </th>
-    <th> Price </th>
-    <th> Status </th>
-    <th> Actions </th>
-  </tr>
-  </thead>
+    <thead>
+    <tr>
+        <th> Name </th>
+        <th> Link </th>
+        <th> Price </th>
+        <th th:if="${currentUserId != wishlistOwnerId}"> Status </th>
+        <th th:if="${currentUserId != wishlistOwnerId}"> Actions </th>
+    </tr>
+    </thead>
 
-  <tbody>
-  <tr th:each="entry : ${presentWithStatus}">
-    <td><span th:text="${entry.key.presentname}"></span></td>
-    <td><a th:href="${entry.key.link}" th:text="${entry.key.link}"></a></td>
-    <td><span th:text="${entry.key.price}"></span></td>
+    <tbody>
+    <tr th:each="entry : ${presentWithStatus}">
+        <td><span th:text="${entry.key.presentName}"></span></td>
+        <td><a th:href="${entry.key.link}" th:text="${entry.key.link}"></a></td>
+        <td><span th:text="${entry.key.price}"></span></td>
 
-    <!-- Status based on reservation status in presentWithStatus map -->
-    <td>
-      <span th:if="${entry.value}" th:text="'Reserved'"></span>
-      <span th:if="${!entry.value}" th:text="'Available'"></span>
-    </td>
+        <!-- Only show status if the current user is not the owner -->
+        <td th:if="${currentUserId != wishlistOwnerId}">
+            <span th:if="${entry.value}" th:text="'Reserved'" class="status reserved"></span>
+            <span th:if="${!entry.value}" th:text="'Available'" class="status available"></span>
+        </td>
 
-    <!-- Action buttons for reserve and cancel reservation -->
-    <td>
-      <form th:if="${!entry.value}" th:action="@{/reserve}" method="post">
-        <input type="hidden" name="presentId" th:value="${entry.key.id}">
-        <button type="submit">Reserve</button>
-      </form>
 
-      <form th:if="${entry.value}" th:action="@{/cancel-reservation}" method="post">
-        <input type="hidden" name="presentId" th:value="${entry.key.id}">
-        <button type="submit">Cancel Reservation</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
+        <!-- Only show actions if the current user is not the owner -->
+        <td th:if="${currentUserId != wishlistOwnerId}">
+            <form th:if="${!entry.value}" th:action="@{/reserve}" method="post">
+                <input type="hidden" name="presentId" th:value="${entry.key.id}">
+                <button type="submit">Reserve</button>
+            </form>
+
+            <form th:if="${entry.value}" th:action="@{/cancel-reservation}" method="post">
+                <input type="hidden" name="presentId" th:value="${entry.key.id}">
+                <button type="submit">Cancel Reservation</button>
+            </form>
+        </td>
+        <td th:if="${currentUserId == wishlistOwnerId}">
+            <form th:action="@{/editPresent/{id}(id=${entry.key.id})}" method="GET">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
 </table>
 
 <a href="/overview">Back to the overview</a>
-<form th:action="@{/create_wish}" method="GET">
-  <input type="submit" value="Add a wish to wishlist">
-</form>
-
+<div th:if="${currentUserId == wishlistOwnerId}">
+    <form th:action="@{/create_wish}" method="GET">
+        <input type="submit" value="Add a wish to wishlist">
+    </form>
+</div>
 </body>
 </html>

@@ -35,9 +35,13 @@ public class WishController {
      */
 
     @GetMapping("/overview")
-    public String overview(Model model) {
+    public String overview(Model model,HttpSession session) {
         List<Wishlist> wishlists = service.getAllWishLists();
-
+        Integer currentUserId = (Integer) session.getAttribute("userId");
+        if (currentUserId == null) {
+            // Redirect or handle if the user is not logged in
+            return "redirect:/login";
+        }
         model.addAttribute("wishlists", wishlists);
 
         return "wishListSite";
@@ -57,7 +61,7 @@ public class WishController {
 
     // problemer med status i present (reserve)
     @GetMapping("/{id}")
-    public String getWishlist(@PathVariable int id, Model model) {
+    public String getWishlist(@PathVariable int id, Model model, HttpSession session) {
         // Fetch wishlist and presents for the specified wishlist ID
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
@@ -76,7 +80,13 @@ public class WishController {
             boolean isReserved = reservedPresentIds.contains(present.getId());
             presentWithStatus.put(present, isReserved); // Store Present with its reservation status
         }
-
+        Integer currentUserId = (Integer) session.getAttribute("userId");
+        if (currentUserId == null) {
+            // Redirect or handle if the user is not logged in
+            return "redirect:/login";
+        }
+        model.addAttribute("currentUserId", currentUserId);
+        model.addAttribute("wishlistOwnerId",id);
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
@@ -204,7 +214,7 @@ public class WishController {
             return "redirect:/login";  // Redirect to login if user is not authenticated
         }
 
-        // Attempt to reserve the present
+        // reservePresent, adds the present to reserve list and returns a boolean.
         boolean isReserved = service.reservePresent(presentId, userId);
 
         // Get the wishlist ID for this present
