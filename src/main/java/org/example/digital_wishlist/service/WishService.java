@@ -60,6 +60,7 @@ public class WishService {
     }
 
     public User findUserById(int id){
+
         return repository.findUserById(id);
     }
 
@@ -67,6 +68,8 @@ public class WishService {
         wishlist.setUserID(userId);
         repository.createWishlist(wishlist);
     }
+
+
 
     public boolean reservePresent(int presentId, int userId) {
         return repository.reservePresent(presentId, userId);

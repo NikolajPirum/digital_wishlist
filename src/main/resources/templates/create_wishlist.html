@@ -6,14 +6,15 @@
 
 </head>
 <body>
+
     <form th:action="@{/create_wishlist}" th:object="${wishlist}" method="post">
+
         <label for="wishlistName">Wishlist Name</label>
 
         <input type="text" id="wishlistName" th:field="*{listName}" name="wishlistName" required>
 
 
         <button type="submit">Create Wishlist</button>
-
 
     </form>
 </body>

@@ -205,6 +205,10 @@ public class WishRepository {
             return null;
         }
     }
+    public void deleteWishlist(int wishlistId) {
+        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        
+    }
 
     public Present getPresentById(int id) {
         String query = "SELECT * FROM Present WHERE PresentID = ?";
