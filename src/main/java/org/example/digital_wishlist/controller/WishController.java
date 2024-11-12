@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.StyleSheet;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,12 +26,14 @@ public class WishController {
     public WishController(WishService service) {
         this.service = service;
     }
-/*
+    /*
     @GetMapping("/favicon.ico")
     public void favicon() {
         // Do nothing or log the request if needed
     }
-*/
+
+     */
+
     @GetMapping("/overview")
     public String overview(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
@@ -66,6 +70,9 @@ public class WishController {
         return "wishList";
 
     }
+
+
+
 
 
     // form for adding a new wish
@@ -125,7 +132,6 @@ public class WishController {
         model.addAttribute("user", new User());
         return "login";
     }
-
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
         try {
@@ -207,20 +213,36 @@ public class WishController {
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
         return "redirect:/" + wishlistId;
     }
-        /*
+    @GetMapping("/create_wishlist")
+    public String createWishList(Model model) {
+        model.addAttribute("wishlist", new Wishlist());
+        return "create_wishlist";
+    }
+
+    @PostMapping("/create_wishlist")
+    public String createWishlist(@ModelAttribute Wishlist wishlist, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId != null) {
+            wishlist.setUserID(userId);
+            service.createWishlist(wishlist, userId);
+            return "redirect:/overview";
+        } else {
+            return "redirect:/login";
+        }
+    }
+/*
     @GetMapping("/create_wishlist")
     public String createWishList(Model model, HttpSession session) {
         model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
         return "create_wishlist";
     }
-    */
+
     @PostMapping("/create_wishlist")
     public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
         service.createWishlist(wishlist);
         model.addAttribute("success", true);
         return "redirect:/overview";
     }
-
     /*
     @PostMapping("/create_wishlist")
     public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {

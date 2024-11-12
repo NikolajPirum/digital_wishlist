@@ -67,8 +67,8 @@ public class WishRepository {
 
     public void createWishlist(Wishlist wishlist){
         // code to createWishlist
-        String query = "INSERT INTO wishlist(Wishlistname) VALUES (?)";
-        jdbcTemplate.update(query, wishlist.getListName());
+        String query = "INSERT INTO wishlist(Wishlistname, UserID) VALUES (?, ?)";
+        jdbcTemplate.update(query, wishlist.getListName(), wishlist.getUserID());
     }
 
     public List<Present> getPresentsByWishlistId(int id){
@@ -204,6 +204,10 @@ public class WishRepository {
             System.err.println("Present ID " + presentId + " does not exist.");
             return null;
         }
+    }
+    public void deleteWishlist(int wishlistId) {
+        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        
     }
 
     public Present getPresentById(int id) {
