@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.StyleSheet;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,7 +80,11 @@ public class WishController {
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";
+
     }
+
+
+
 
 
     // form for adding a new wish
@@ -112,9 +118,8 @@ public class WishController {
         }else{
             return "wishList";
         }
-    }
 
-    // update wish
+    }
 
     @GetMapping("/create_user")
     public String showCreateUserForm(Model model) {
@@ -152,28 +157,44 @@ public class WishController {
     }
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
-        User foundUser = service.findUser(user.getUsername());
+        try {
+            User foundUser = service.findUser(user.getUsername());
 
-        if (foundUser != null) {
-            System.out.println("Found user: " + foundUser.getUsername() + " with ID: " + foundUser.getId());
-        } else {
-            System.out.println("No user found with username: " + user.getUsername());
-        }
+            if (foundUser == null) {
+                model.addAttribute("error", "User not found.");
+                return "login";
+            }
 
-        // Check for password match
-        if (foundUser != null && foundUser.getPassword().equals(user.getPassword())) {
+            if (!foundUser.getPassword().equals(user.getPassword())) {
+                model.addAttribute("error", "Wrong password.");
+                return "login";
+            }
+
+            // Store user ID in session and redirect to overview page
             session.setAttribute("userId", foundUser.getId());
             return "redirect:/" + foundUser.getId() + "/wishlist";
-        } else {
-            model.addAttribute("error", "Wrong Password or Username");
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the stack trace for debugging
+            model.addAttribute("error", "An unexpected error occurred. Please try again.");
             return "login";
         }
+    }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login";
     }
     @GetMapping("/favicon.ico")
     @ResponseBody
     public void returnFavicon() {
         // You can leave this method empty, or return an actual favicon if desired
     }
+
+
+
 
 
     @PostMapping("/reserve")
@@ -215,28 +236,58 @@ public class WishController {
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
         return "redirect:/" + wishlistId;
     }
-
-    /*@GetMapping("/create_wishlist")
-    public String createWishList(Model model, HttpSession session) {
-        model.addAttribute("wishlist", new Wishlist(rs.getInt("WishlistID"),rs.getString("Wishlistname")));
+    @GetMapping("/create_wishlist")
+    public String createWishList(Model model) {
+        model.addAttribute("wishlist", new Wishlist());
         return "create_wishlist";
     }
 
     @PostMapping("/create_wishlist")
-    public String createWishlist(@ModelAttribute Wishlist wishlist, Model model) {
-        service.createWishlist(wishlist);
-        model.addAttribute("success", true);
+    public String createWishlist(@ModelAttribute Wishlist wishlist, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId != null) {
+            wishlist.setUserID(userId);
+            service.createWishlist(wishlist, userId);
+            return "redirect:/overview";
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+    @GetMapping("/editWishlist/{id}")
+    public String showWishlistUpdateForm(@PathVariable("id") int id, Model model){
+        Wishlist wishlist = service.getWishList(id);
+        List<Present> presents = wishlist.getPresentList();
+        model.addAttribute("wishlist", wishlist);
+        model.addAttribute("presents", presents);
+        return"updateWishlist";
+    }
+    @PostMapping("/update/wishlist")
+    public String updateWishlist(@ModelAttribute("updateWishlist") Wishlist wishlist, Model model){
+        service.updateWishlist(wishlist);
+        model.addAttribute("updatedWishlistName", wishlist.getListName());
         return "redirect:/overview";
     }
-    /*
-    @PostMapping("/create_wishlist")
-    public String createWishlist(@RequestParam String wishlistName,@RequestParam int userId, Principal principal, Model model) {
-        String username = principal.getName();
-        User user = service.findUser(username);
 
-
-        service.createWishlist(wishlistName, userId);
+    @GetMapping("/editPresent/{id}")
+    public String showPresentUpdateForm(@PathVariable("id") int id, Model model) {
+        Present present = service.getPresentById(id);
+        model.addAttribute("present", present);
+        return "update_present";
     }
 
-     */
+    @PostMapping("/update/present")
+    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+      service.updatePresent(present);
+        model.addAttribute("present", present);
+        return "redirect:/overview";
+    }
+
+    public void deleteUser(){
+        // code to deleteUser
+    }
+
+    public void deleteWishlist(){
+        // code to deleteWishlist
+    }
 }

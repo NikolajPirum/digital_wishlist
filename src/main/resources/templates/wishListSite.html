@@ -12,7 +12,11 @@
 
     <h3>Here is an overview of your different wishlists</h3>
 </header>
-
+<section>
+    <a th:href="@{/create_wishlist}">
+        <button type="button">Create New Wishlist</button>
+    </a>
+</section>
 <ul>
     <li th:each="wishlist : ${wishlists}">
         <a th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></a>
@@ -25,9 +29,12 @@
             <input type="submit" value="Update wishlist">
         </form>
 
-    </li>
 
 </ul>
+
+<form th:action="@{/logout}" method ="GET">
+    <input type="submit" value="logout">
+</form>
 
 </body>
 </html>
