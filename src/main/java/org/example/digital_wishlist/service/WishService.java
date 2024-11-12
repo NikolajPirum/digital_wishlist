@@ -26,6 +26,10 @@ public class WishService {
         repository.deleteUser(id);
     }
 
+    public List<Wishlist> getWishlistByUserId(int userId){
+        return repository.getWishlistByUserId(userId);
+    }
+
 
     public List<Wishlist> getAllWishLists(){
         return repository.getAllWishLists();

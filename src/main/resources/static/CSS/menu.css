@@ -1,0 +1,38 @@
+/* Basic reset */
+body, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Styling the navigation bar */
+.menubar {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Styling the list items in the menubar */
+.menubar ul {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.menubar li {
+    padding: 14px 20px;
+}
+
+/* Styling the links */
+.menubar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.menubar a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}

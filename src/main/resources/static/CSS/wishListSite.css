@@ -1,0 +1,121 @@
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+h3 {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Styling for the wishlist items */
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 600px;
+}
+
+li {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+li a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+
+form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 150px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+form input[type="submit"] {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styling the navigation bar */
+.menubar {
+    padding: 10px 0;
+    text-align: center;  /* Center align the menu */
+}
+
+/* Styling the list container */
+.menubar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Makes the menu items horizontal */
+    justify-content: center; /* Centers the menu items */
+}
+
+/* Styling individual list items */
+.menubar li {
+    margin: 0 15px; /* Adds spacing between menu items */
+}
+
+/* Styling the links */
+.menubar a {
+    color: white;
+    background-color: #007bff;
+    height: fit-content;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block; /* Makes the entire area clickable */
+    font-weight: bold;
+}
+
+/* Hover effect for links */
+.menubar a:hover {
+    background-color: #007bff;
+}
