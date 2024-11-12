@@ -41,6 +41,18 @@ public class WishController {
         return "wishListSite";
     }
 
+    @GetMapping("/overview/noaccess")
+    public String overviewNoAccess(Model model) {
+        List<Wishlist> wishlists = service.getAllWishLists();
+
+        model.addAttribute("wishlists", wishlists);
+
+        return "wishListSiteNoAccess";
+    }
+
+    // lave en anden metode der viser en begrænset html fil
+
+
     // problemer med status i present (reserve)
     @GetMapping("/{id}")
     public String getWishlist(@PathVariable int id, Model model) {
@@ -71,8 +83,9 @@ public class WishController {
 
     // form for adding a new wish
     @GetMapping("create_wish")
-    public String showAddWishForm(Model model){
-        List<Wishlist> wishLists = service.getAllWishLists();
+    public String showAddWishForm(Model model, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        List<Wishlist> wishLists = service.getWishlistByUserId(userId);
 
         Present present = new Present();
 
@@ -99,8 +112,9 @@ public class WishController {
         }else{
             return "wishList";
         }
-
     }
+
+    // update wish
 
     @GetMapping("/create_user")
     public String showCreateUserForm(Model model) {

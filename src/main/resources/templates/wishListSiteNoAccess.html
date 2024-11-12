@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Wishlists No Access</title>
+    <link rel="stylesheet" th:href="@{/CSS/wishListSite.css}">
+</head>
+<body>
+
+<header>
+    <h1>All wishlists</h1>
+
+    <h3>Here is an overview of the different wishlists</h3>
+</header>
+
+<div class="menubar">
+    <ul>
+        <li><a href="/{userID}/wishlist"> My Wishlists</a></li>
+        <li><a href="/create_wish">New Wish</a></li>
+        <li><a href="#">New Wishlist</a></li>
+    </ul>
+</div>
+
+<ul>
+    <li th:each="wishlist : ${wishlists}">
+        <a th:href = "@{'/' + ${wishlist.id}}" th:text = "${wishlist.listName}"></a>
+    </li>
+</ul>
+
+
+
+</body>
+</html>

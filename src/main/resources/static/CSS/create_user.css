@@ -99,3 +99,39 @@ p{
         padding: 10px;
     }
 }
+
+/* Styling the navigation bar */
+.menubar {
+    padding: 10px 0;
+    text-align: center;  /* Center align the menu */
+}
+
+/* Styling the list container */
+.menubar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Makes the menu items horizontal */
+    justify-content: center; /* Centers the menu items */
+}
+
+/* Styling individual list items */
+.menubar li {
+    margin: 0 15px; /* Adds spacing between menu items */
+}
+
+/* Styling the links */
+.menubar a {
+    color: white;
+    background-color: #007bff;
+    height: fit-content;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block; /* Makes the entire area clickable */
+    font-weight: bold;
+}
+
+/* Hover effect for links */
+.menubar a:hover {
+    background-color: #007bff;
+}

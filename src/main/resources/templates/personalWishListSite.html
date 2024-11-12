@@ -8,9 +8,16 @@
 
 <header>
     <h1>My Wishlists </h1>
-
     <h3>Here is an overview of your different wishlists</h3>
 </header>
+
+<div class="menubar">
+    <ul>
+        <li><a href="/overview/noaccess"> Wishlists</a></li>
+        <li><a href="/create_wish">New Wish</a></li>
+        <li><a href="#">New Wishlist</a></li>
+    </ul>
+</div>
 
 <ul>
     <li th:each="wishlist : ${wishlists}">
@@ -25,7 +32,6 @@
         </form>
 
     </li>
-
 </ul>
 
 </body>

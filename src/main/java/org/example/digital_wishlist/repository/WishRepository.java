@@ -142,7 +142,6 @@ public class WishRepository {
         }
     }
 
-
     public boolean cancelReservation(int presentId, int userId) {
         String sql = "DELETE FROM reserve WHERE presentid = ? AND userid = ?";
         int rowsAffected = jdbcTemplate.update(sql, presentId, userId);
