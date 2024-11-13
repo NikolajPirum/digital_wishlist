@@ -16,11 +16,6 @@ public class Wishlist {
         this.PresentList = PresentList;
         this.reserv = isReserv;
     }
-    public Wishlist(int wishlistID, String listName, int userId){
-        this.wishlistID = wishlistID;
-        this.listName = listName;
-        this.userId = userId;
-    }
 
     public Wishlist(int WishlistID,String listName, ArrayList<Present> PresentList, boolean isReserv, int userId) {
         this.wishlistID = WishlistID;
