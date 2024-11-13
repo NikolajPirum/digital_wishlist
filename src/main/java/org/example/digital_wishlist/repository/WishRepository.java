@@ -25,8 +25,9 @@ public class WishRepository {
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistId"),
             rs.getString("Wishlistname"),
-            rs.getInt("UserID")
+            rs.getInt("userId")
     );
+
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
     private final RowMapper<Present> presentRowMapper = (rs,rowNum) -> new Present(
@@ -79,9 +80,9 @@ public class WishRepository {
     }
 
     public int updateWishlist(Wishlist wishlist) {
-        String query = "UPDATE Wishlist SET name =? WHERE wishlist_id =?";
+        String query = "UPDATE Wishlist SET Wishlistname = ? WHERE WishlistID = ?";
         //returnere int int er antallet af rækker, der blev påvirket af forespørgslen
-        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
+        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getWishlistID());
     }
 
     public List<Wishlist> getWishlistByUserId(int id){
@@ -114,9 +115,11 @@ public class WishRepository {
     }
 
     public Wishlist getWishlist(int id){
-        String query = "select * from wishlist where WishlistID = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+        String query = "select * from WishList where WishlistID = ?";
+        Wishlist wishlist =  jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+        return wishlist;
     }
+
 
     public boolean findByUsername(String username) {
         String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";

@@ -89,7 +89,7 @@ public class WishController {
             return "redirect:/login";
         }
         model.addAttribute("currentUserId", currentUserId);
-        model.addAttribute("wishlistOwnerId",id);
+        model.addAttribute("wishlistOwnerId",wishlist.getUserID());
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         return "wishList";

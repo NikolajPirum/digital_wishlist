@@ -34,6 +34,11 @@ public class Wishlist {
         this.wishlistID = wishlistID;
         this.listName = listName;
     }
+    public Wishlist(int wishlistID, String listName, int userId) {
+        this.wishlistID = wishlistID;
+        this.listName = listName;
+        this.userId = userId;
+    }
 
     public Wishlist(String listName, int userId, ArrayList<Present> Presentlist){
         this.listName = listName;
