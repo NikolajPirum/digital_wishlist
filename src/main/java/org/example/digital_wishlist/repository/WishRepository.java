@@ -234,4 +234,6 @@ public class WishRepository {
         String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
         jdbcTemplate.update(sql, wishlistId);
     }
+
+
 }

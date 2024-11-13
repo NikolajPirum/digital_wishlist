@@ -120,6 +120,7 @@ public class WishService {
             throw new IllegalArgumentException("Wishlist not found" + listName + "does not exist");
         }
     }
+
     public int findWishlistByName(String listName){
         return repository.findWishlistByName(listName);
     }
