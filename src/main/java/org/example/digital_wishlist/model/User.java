@@ -2,7 +2,7 @@ package org.example.digital_wishlist.model;
 
 import java.util.ArrayList;
 
-public class User {
+public class    User {
     private int userId;
     private String name;
     private String email;

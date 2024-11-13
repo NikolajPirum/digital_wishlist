@@ -10,11 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -212,13 +208,38 @@ public class WishRepository {
             return null;
         }
     }
-    public void deleteWishlist(int wishlistId) {
-        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
-        
-    }
-
     public Present getPresentById(int id) {
         String query = "SELECT * FROM Present WHERE PresentID = ?";
         return jdbcTemplate.queryForObject(query, presentRowMapper, id);
+    }
+    public Wishlist findWishlistByName(String listName){
+        String query = "SELECT WishlistID FROM Wishlist WHERE wishlistName = ?";
+        try{
+            return jdbcTemplate.queryForObject(query,Wishlist.class, listName);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Wishlist not found for name: " + listName);
+            return null;
+        }
+    }
+    public void deleteReserveByWishlistId(Integer wishlistId) {
+        String query = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
+        jdbcTemplate.update(query, wishlistId);
+    }
+    public void deletePresentByWishlistId(Integer wishlistId) {
+        String query = "DELETE FROM Present WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
+    }
+    public void deleteWishlistById(Integer wishlistId) {
+        String query = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
+    }
+    public Integer findOwnerByWishlistId(Integer wishlistId) {
+        String query = "SELECT UserID FROM Wishlist WHERE WishlistID = ?";
+        try{
+            return jdbcTemplate.queryForObject(query, Integer.class, wishlistId);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Owner not found for WishlistID: " + wishlistId);
+            return null;
+        }
     }
 }

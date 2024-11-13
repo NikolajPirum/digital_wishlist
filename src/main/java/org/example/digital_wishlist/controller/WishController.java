@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
+import org.example.digital_wishlist.repository.WishRepository;
 import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +23,11 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
+    private final WishRepository repository;
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -116,7 +119,7 @@ public class WishController {
     public String addWish(@ModelAttribute Present present){
         service.addWish(present);
 
-        return "redirect:/overview";
+        return "redirect:/overview/noaccess";
     }
 
     @PostMapping("/{id}/delete")
@@ -124,7 +127,7 @@ public class WishController {
         int deletedRows = service.deleteWish(id);
 
         if(deletedRows > 0){ // hvis en row er slettet, så vil deltedrows være > 0
-            return "redirect:/overview";
+            return "redirect:/overview/noaccess";
         }else{
             return "wishList";
         }
@@ -157,6 +160,7 @@ public class WishController {
         List<Wishlist> wishlists = service.getWishlistByUserId(userId);
 
         model.addAttribute("wishlists", wishlists);
+        model.addAttribute("userID", userId);
         return "personalWishListSite";
     }
 
@@ -203,10 +207,6 @@ public class WishController {
         // You can leave this method empty, or return an actual favicon if desired
     }
 
-
-
-
-
     @PostMapping("/reserve")
     public String reservePresent(@RequestParam("presentId") int presentId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
@@ -220,7 +220,7 @@ public class WishController {
         // Get the wishlist ID for this present
         Integer wishlistId = service.getWishlistIdByPresentId(presentId);
         if (wishlistId == null) {
-            return "redirect:/overview";  // Redirect to an error page if wishlistId is not found
+            return "redirect:/overview/noaccess";  // Redirect to an error page if wishlistId is not found
         }
 
         // Redirect to the wishlist page, invoking getWishlist to refresh the status
@@ -257,8 +257,9 @@ public class WishController {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId != null) {
             wishlist.setUserID(userId);
+            System.out.println("Dette er userID: " + wishlist.getUserID());
             service.createWishlist(wishlist, userId);
-            return "redirect:/overview";
+            return "redirect:/overview/noaccess";
         } else {
             return "redirect:/login";
         }
@@ -293,11 +294,23 @@ public class WishController {
         return "redirect:/overview";
     }
 
-    public void deleteUser(){
-        // code to deleteUser
-    }
+    @PostMapping("/{id}/deletebyid")
+    public String deleteWishlist(@PathVariable("id") int id, HttpSession session) {
+        // Retrieve the userId from the session
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Wishlist wishlist = service.getWishList(id);
 
-    public void deleteWishlist(){
-        // code to deleteWishlist
+        if (userId != null && wishlist.getUserID() == userId) {
+            try {
+                service.deleteWishlist(id, userId);
+                return "redirect:/overview/noaccess";
+            } catch (Exception e) {
+                return "error";
+            }
+        }
+        return "/overview/noaccess";
     }
 }

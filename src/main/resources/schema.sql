@@ -23,7 +23,7 @@ CREATE TABLE WishList (
                           Wishlistname VARCHAR(30),
                           UserID INTEGER,
                           PRIMARY KEY(WishlistID),
-                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
+                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID) ON DELETE CASCADE
 );
 
 -- Create Present table
@@ -35,7 +35,7 @@ CREATE TABLE Present (
                          WishlistID INTEGER,  -- This column will hold foreign key
                          Link VARCHAR(255),
                          PRIMARY KEY(PresentID),
-                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
+                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID) ON DELETE CASCADE
 );
 
 
@@ -45,8 +45,8 @@ CREATE TABLE Reserve (
                          PresentID INTEGER,
                          UserID INTEGER,
                          PRIMARY KEY(ReserveID),
-                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
-                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID),
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID) ON DELETE CASCADE,
+                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID) ON DELETE CASCADE,
                          CONSTRAINT unique_reservation UNIQUE (PresentID, UserID)
 );
 

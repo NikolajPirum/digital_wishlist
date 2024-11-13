@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
@@ -39,6 +40,7 @@ public class WishService {
         return repository.getWishlist(id);
     }
 
+
     public List<Present> getPresentsByWishId(int id){
         return repository.getPresentsByWishListId(id);
     }
@@ -64,7 +66,6 @@ public class WishService {
     }
 
     public User findUserById(int id){
-
         return repository.findUserById(id);
     }
 
@@ -108,5 +109,28 @@ public class WishService {
     public Present getPresentById(int id) {
         Present present = repository.getPresentById(id);
         return present;
+    }
+    public void deleteWishlist(int id, Integer userId) {
+        Wishlist wishlist = repository.getWishlist(id);
+        if(wishlist != null){
+            if(wishlist.getUserID() == userId) {
+                repository.deleteReserveByWishlistId(wishlist.getWishlistID());
+                repository.deletePresentByWishlistId(wishlist.getWishlistID());
+                repository.deleteWishlistById(wishlist.getWishlistID());
+            } else{
+                throw new IllegalArgumentException("User not authorized to delete wishlist");
+            }
+        } else {
+            throw new IllegalArgumentException("Wishlist not found " + id + " does not exist");
+        }
+    }
+
+    public Wishlist findWishlistByName(String listName){
+        return repository.findWishlistByName(listName);
+    }
+
+    public boolean isOwner(Integer userId, Integer wishlistId) {
+        Integer ownerId = repository.findOwnerByWishlistId(wishlistId);
+        return ownerId != null && ownerId.equals(userId);
     }
 }
