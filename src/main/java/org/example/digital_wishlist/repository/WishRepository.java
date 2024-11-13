@@ -24,7 +24,8 @@ public class WishRepository {
 
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistId"),
-            rs.getString("Wishlistname")
+            rs.getString("Wishlistname"),
+            rs.getInt("UserID")
     );
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
@@ -117,7 +118,6 @@ public class WishRepository {
         return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
     }
 
-
     public boolean findByUsername(String username) {
         String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
@@ -209,24 +209,24 @@ public class WishRepository {
         String query = "SELECT * FROM Present WHERE PresentID = ?";
         return jdbcTemplate.queryForObject(query, presentRowMapper, id);
     }
-    public Integer findWishlistByName(String listName){
+    public Wishlist findWishlistByName(String listName){
         String query = "SELECT WishlistID FROM Wishlist WHERE wishlistName = ?";
         try{
-            return jdbcTemplate.queryForObject(query, Integer.class, listName);
+            return jdbcTemplate.queryForObject(query,Wishlist.class, listName);
         } catch (EmptyResultDataAccessException e) {
             System.out.println("Wishlist not found for name: " + listName);
             return null;
         }
     }
-    public void deleteReserveByWishlistId(int wishlistId) {
+    public void deleteReserveByWishlistId(Integer wishlistId) {
         String query = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
         jdbcTemplate.update(query, wishlistId);
     }
-    public void deletePresentByWishlistId(int wishlistId) {
+    public void deletePresentByWishlistId(Integer wishlistId) {
         String query = "DELETE FROM Present WHERE WishlistID = ?";
         jdbcTemplate.update(query, wishlistId);
     }
-    public void deleteWishlistById(int wishlistId) {
+    public void deleteWishlistById(Integer wishlistId) {
         String query = "DELETE FROM Wishlist WHERE WishlistID = ?";
         jdbcTemplate.update(query, wishlistId);
     }

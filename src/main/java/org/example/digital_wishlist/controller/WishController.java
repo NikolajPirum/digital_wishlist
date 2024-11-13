@@ -257,6 +257,7 @@ public class WishController {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId != null) {
             wishlist.setUserID(userId);
+            System.out.println("Dette er userID: " + wishlist.getUserID());
             service.createWishlist(wishlist, userId);
             return "redirect:/overview/noaccess";
         } else {
@@ -293,62 +294,23 @@ public class WishController {
         return "redirect:/overview";
     }
 
-    /*@PostMapping("/{listName}/deletebyname")
-    public String deleteWishlist(@PathVariable ("listName") String listName, HttpSession session){
-        // code to deleteWishlist
-        Integer userId = (Integer)session.getAttribute("userId");
-        /*if(userId == null){
-            throw new IllegalStateException("User not logged in");
-        }
-
-        try {
-            // Call the service to delete the wishlist for the user
-            service.deleteWishlist(listName, userId);
-            return "redirect:/wishlist/list"; // Redirect to wishlist list or success page
-
-        } catch (IllegalArgumentException e) {
-            return "error";  // Return an error page if the wishlist does not exist
-        } catch (SecurityException e) {
-            return "error";  // Return an error page if the user is not authorized to delete the wishlist
-        }*/
-        /*if(userId == null) {
-            return "redirect:/login";
-        }
-        Integer wishlistId = service.findWishlistByName(listName);
-        Wishlist wishlist = repository.findWishlistByName(listName);
-            if(wishlist != null && wishlist.getUserId().equals(userId)){
-
-
-                try {
-                    service.deleteWishlist(listName,userId);
-                    return "redirect:/overview";
-                } catch (Exception e) {
-                    return "Failed to delete wishlist. Error: " + e.getMessage();
-                }
-            }
-        return "redirect:/overview";*/
-    //}
-    @PostMapping("/{listName}/deletebyname")
-    public String deleteWishlist(@PathVariable("listName") String listName, HttpSession session) {
+    @PostMapping("/{id}/deletebyid")
+    public String deleteWishlist(@PathVariable("id") int id, HttpSession session) {
         // Retrieve the userId from the session
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
-            return "redirect:/login";  // Redirect to login if not logged in
+            return "redirect:/login";
         }
+        Wishlist wishlist = service.getWishList(id);
 
-        // Use the service to find the wishlist by name and retrieve its userId
-        Wishlist wishlist = service.findWishlistByName(listName);
-        if (wishlist.getUserId().equals(userId)) {
-            // Proceed with deletion only if the userId matches
+        if (userId != null && wishlist.getUserID() == userId) {
             try {
-                service.deleteWishlist(listName, userId);
-                return "redirect:/overview";  // Redirect to overview on success
+                service.deleteWishlist(id, userId);
+                return "redirect:/overview/noaccess";
             } catch (Exception e) {
-                return "error";  // Optionally return an error page
+                return "error";
             }
         }
-
-        // If the wishlist doesn't exist or doesn't belong to the logged-in user, redirect
-        return "redirect:/overview";
+        return "/overview/noaccess";
     }
 }
