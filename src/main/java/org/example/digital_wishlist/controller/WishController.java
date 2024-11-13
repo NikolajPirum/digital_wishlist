@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.digital_wishlist.model.Present;
 import org.example.digital_wishlist.model.User;
 import org.example.digital_wishlist.model.Wishlist;
+import org.example.digital_wishlist.repository.WishRepository;
 import org.example.digital_wishlist.service.WishService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +23,11 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
+    private final WishRepository repository;
 
-    public WishController(WishService service) {
+    public WishController(WishService service, WishRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
     /*
     @GetMapping("/favicon.ico")
@@ -87,7 +90,7 @@ public class WishController {
             return "redirect:/login";
         }
         model.addAttribute("currentUserId", currentUserId);
-        model.addAttribute("wishlistOwnerId",id);
+        model.addAttribute("wishlistOwnerId",wishlist.getUserID());
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
         // model.addAttribute("present", presents);
@@ -252,6 +255,7 @@ public class WishController {
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId != null) {
             wishlist.setUserID(userId);
+            System.out.println("Dette er userID: " + wishlist.getUserID());
             service.createWishlist(wishlist, userId);
             return "redirect:/overview/noaccess";
         } else {
@@ -287,19 +291,23 @@ public class WishController {
         return "redirect:/overview";
     }
 
-    @PostMapping("/{listName}/deletebyname")
-    public String deleteWishlist(@PathVariable ("listName") String listName, HttpSession session){
-        // code to deleteWishlist
-        Integer userId = (int)session.getAttribute("userId");
-        Integer wishlistId = service.findWishlistByName(listName);
-        if(userId == wishlistId){
+    @PostMapping("/{id}/deletebyid")
+    public String deleteWishlist(@PathVariable("id") int id, HttpSession session) {
+        // Retrieve the userId from the session
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login";
+        }
+        Wishlist wishlist = service.getWishList(id);
+
+        if (userId != null && wishlist.getUserID() == userId) {
             try {
-                service.deleteWishlist(listName);
-                return "redirect:/overview";
+                service.deleteWishlist(id, userId);
+                return "redirect:/overview/noaccess";
             } catch (Exception e) {
-                return "Failed to delete wishlist. Error: " + e.getMessage();
+                return "error";
             }
         }
-        return "redirect:/overview";
+        return "/overview/noaccess";
     }
 }

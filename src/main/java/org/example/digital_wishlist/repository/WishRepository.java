@@ -10,11 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -28,8 +24,10 @@ public class WishRepository {
 
     private final RowMapper<Wishlist> wishlistRowMapper = (rs, rowNum) -> new Wishlist(
             rs.getInt("WishlistId"),
-            rs.getString("Wishlistname")
+            rs.getString("Wishlistname"),
+            rs.getInt("userId")
     );
+
 
     // rowMapper til at skabe present objekter ud af ResultSets (rs)
     private final RowMapper<Present> presentRowMapper = (rs,rowNum) -> new Present(
@@ -82,9 +80,9 @@ public class WishRepository {
     }
 
     public int updateWishlist(Wishlist wishlist) {
-        String query = "UPDATE Wishlist SET name =? WHERE wishlist_id =?";
+        String query = "UPDATE Wishlist SET Wishlistname = ? WHERE WishlistID = ?";
         //returnere int int er antallet af rækker, der blev påvirket af forespørgslen
-        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getPresentList());
+        return jdbcTemplate.update(query, wishlist.getListName(), wishlist.getWishlistID());
     }
 
     public List<Wishlist> getWishlistByUserId(int id){
@@ -117,8 +115,9 @@ public class WishRepository {
     }
 
     public Wishlist getWishlist(int id){
-        String query = "select * from wishlist where WishlistID = ?";
-        return jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+        String query = "select * from WishList where WishlistID = ?";
+        Wishlist wishlist =  jdbcTemplate.queryForObject(query, wishlistRowMapper, id);
+        return wishlist;
     }
 
 
@@ -213,26 +212,35 @@ public class WishRepository {
         String query = "SELECT * FROM Present WHERE PresentID = ?";
         return jdbcTemplate.queryForObject(query, presentRowMapper, id);
     }
-    public Integer findWishlistByName(String listName){
+    public Wishlist findWishlistByName(String listName){
         String query = "SELECT WishlistID FROM Wishlist WHERE wishlistName = ?";
         try{
-            return jdbcTemplate.queryForObject(query, Integer.class, listName);
+            return jdbcTemplate.queryForObject(query,Wishlist.class, listName);
         } catch (EmptyResultDataAccessException e) {
             System.out.println("Wishlist not found for name: " + listName);
             return null;
         }
     }
-    public void deleteReserveByWishlistId(int wishlistId) {
-        String sql = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
-        jdbcTemplate.update(sql, wishlistId);
+    public void deleteReserveByWishlistId(Integer wishlistId) {
+        String query = "DELETE FROM Reserve WHERE PresentID IN (SELECT PresentID FROM Present WHERE WishlistID = ?)";
+        jdbcTemplate.update(query, wishlistId);
     }
-    public void deletePresentByWishlistId(int wishlistId) {
-        String sql = "DELETE FROM Present WHERE WishlistID = ?";
-        jdbcTemplate.update(sql, wishlistId);
+    public void deletePresentByWishlistId(Integer wishlistId) {
+        String query = "DELETE FROM Present WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
     }
-    public void deleteWishlistById(int wishlistId) {
-        String sql = "DELETE FROM Wishlist WHERE WishlistID = ?";
-        jdbcTemplate.update(sql, wishlistId);
+    public void deleteWishlistById(Integer wishlistId) {
+        String query = "DELETE FROM Wishlist WHERE WishlistID = ?";
+        jdbcTemplate.update(query, wishlistId);
+    }
+    public Integer findOwnerByWishlistId(Integer wishlistId) {
+        String query = "SELECT UserID FROM Wishlist WHERE WishlistID = ?";
+        try{
+            return jdbcTemplate.queryForObject(query, Integer.class, wishlistId);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println("Owner not found for WishlistID: " + wishlistId);
+            return null;
+        }
     }
 
 

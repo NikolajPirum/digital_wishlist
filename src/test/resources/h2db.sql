@@ -14,7 +14,7 @@ CREATE TABLE AppUser (
                          Password VARCHAR(30),
                          Email VARCHAR(50),
                          PRIMARY KEY(UserID)
-                         -- This column will hold foreign key
+    -- This column will hold foreign key
 );
 
 -- Create WishList table
@@ -23,7 +23,7 @@ CREATE TABLE WishList (
                           Wishlistname VARCHAR(30),
                           UserID INTEGER,
                           PRIMARY KEY(WishlistID),
-                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID) ON DELETE CASCADE
+                          FOREIGN KEY (UserID) REFERENCES AppUser(UserID)
 );
 
 -- Create Present table
@@ -35,7 +35,7 @@ CREATE TABLE Present (
                          WishlistID INTEGER,  -- This column will hold foreign key
                          Link VARCHAR(255),
                          PRIMARY KEY(PresentID),
-                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID) ON DELETE CASCADE
+                         FOREIGN KEY (WishlistID) REFERENCES WishList(WIshlistID)
 );
 
 
@@ -45,8 +45,31 @@ CREATE TABLE Reserve (
                          PresentID INTEGER,
                          UserID INTEGER,
                          PRIMARY KEY(ReserveID),
-                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID) ON DELETE CASCADE,
-                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID) ON DELETE CASCADE,
+                         FOREIGN KEY (PresentID) REFERENCES Present(PresentID),
+                         FOREIGN KEY (UserID) REFERENCES AppUser(UserID),
                          CONSTRAINT unique_reservation UNIQUE (PresentID, UserID)
 );
 
+-- Insert data into AppUser table
+INSERT INTO AppUser (Name, Username, Password, Email)
+VALUES ('Alice', 'alice01', 'pass1234', 'alice@example.com'),
+       ('Bob', 'bob_the_builder', 'bobpass', 'bob@example.com'),
+       ('Charlie', 'charlie123', 'charliepass', 'charlie@example.com');
+
+-- Insert data into WishList table
+INSERT INTO WishList (Wishlistname, UserID)
+VALUES ('Alices Birthday Wishlist', 1),
+       ('Bobs Christmas Wishlist', 2),
+       ('Charlies Wedding Wishlist', 3);
+
+-- Insert data into Present table
+INSERT INTO Present (Presentname, Brand, Price, WishlistID, Link)
+VALUES ('Wireless Headphones', 'Sony', 150.00, 1, 'https://example.com/sony-headphones'),
+       ('Toolset', 'Bosch', 80.00, 2, 'https://example.com/bosch-toolset'),
+       ('Coffee Maker', 'Nespresso', 120.00, 3, 'https://example.com/nespresso-coffee-maker');
+
+-- Insert data into Reserve table
+INSERT INTO Reserve (PresentID, UserID)
+VALUES (1, 2),
+       (2, 1),
+       (3, 1);
