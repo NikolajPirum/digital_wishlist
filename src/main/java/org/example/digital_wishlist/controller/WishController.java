@@ -68,6 +68,7 @@ public class WishController {
         // Fetch wishlist and presents for the specified wishlist ID
         Wishlist wishlist = service.getWishList(id);
         List<Present> presents = service.getPresentsByWishId(id);
+        // service.deleteWish(id);
 
         if (wishlist == null) {
             return "redirect:/wishListSite";  // Redirect if wishlist is not found
@@ -92,14 +93,12 @@ public class WishController {
         model.addAttribute("wishlistOwnerId",wishlist.getUserID());
         model.addAttribute("wishlist", wishlist);
         model.addAttribute("presentWithStatus", presentWithStatus); // Pass map to the view
+        // model.addAttribute("present", presents);
         return "wishList";
 
     }
 
-
-
-
-
+    
     // form for adding a new wish
     @GetMapping("create_wish")
     public String showAddWishForm(Model model, HttpSession session) {
@@ -122,7 +121,7 @@ public class WishController {
         return "redirect:/overview/noaccess";
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/delete/{id}")
     public String deleteWish(@PathVariable int id){
         int deletedRows = service.deleteWish(id);
 
@@ -131,7 +130,6 @@ public class WishController {
         }else{
             return "wishList";
         }
-
     }
 
     @GetMapping("/create_user")
@@ -288,9 +286,8 @@ public class WishController {
     }
 
     @PostMapping("/update/present")
-    public String updatePresent(@ModelAttribute ("present") Present present, Model model){
+    public String updatePresent(@ModelAttribute ("present") Present present){
       service.updatePresent(present);
-        model.addAttribute("present", present);
         return "redirect:/overview";
     }
 

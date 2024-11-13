@@ -31,5 +31,14 @@
             <a th:href="@{/overview}" class ="cancel-btn">Cancel</a>
         </div>
     </form>
+
+    <div>
+    <form th:action="@{/delete/{id}(id=${present.id})}" method="POST">
+        <button class="cancel-btn" type="submit" > Delete Wish</button>
+    </form>
+    </div>
+
+
+
 </body>
 </html>

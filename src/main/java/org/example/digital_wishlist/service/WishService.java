@@ -66,6 +66,7 @@ public class WishService {
     }
 
     public User findUserById(int id){
+
         return repository.findUserById(id);
     }
 
@@ -127,10 +128,5 @@ public class WishService {
 
     public Wishlist findWishlistByName(String listName){
         return repository.findWishlistByName(listName);
-    }
-
-    public boolean isOwner(Integer userId, Integer wishlistId) {
-        Integer ownerId = repository.findOwnerByWishlistId(wishlistId);
-        return ownerId != null && ownerId.equals(userId);
     }
 }
