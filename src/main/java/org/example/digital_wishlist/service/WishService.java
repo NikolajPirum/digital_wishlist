@@ -23,10 +23,6 @@ public class WishService {
         repository.createUser(user);
     }
 
-    public void deleteUser(int id){
-        repository.deleteUser(id);
-    }
-
     public List<Wishlist> getWishlistByUserId(int userId){
         return repository.getWishlistByUserId(userId);
     }
@@ -39,7 +35,6 @@ public class WishService {
     public Wishlist getWishList(int id){
         return repository.getWishlist(id);
     }
-
 
     public List<Present> getPresentsByWishId(int id){
         return repository.getPresentsByWishListId(id);
@@ -65,17 +60,10 @@ public class WishService {
         return repository.findUser(username);
     }
 
-    public User findUserById(int id){
-
-        return repository.findUserById(id);
-    }
-
     public void createWishlist(Wishlist wishlist, int userId){
         wishlist.setUserID(userId);
         repository.createWishlist(wishlist);
     }
-
-
 
     public boolean reservePresent(int presentId, int userId) {
         return repository.reservePresent(presentId, userId);
@@ -90,14 +78,10 @@ public class WishService {
         return repository.cancelReservation(presentId, userId);
     }
 
-
-    public List<Present> getPresents(int id) {
-       return repository.getPresents(id);
-    }
-
     public List<Integer> getReservedPresentIds(int id) {
         return repository.getReservedPresentIds(id);
     }
+
     public Integer getWishlistIdByPresentId(int presentId) {
         return repository.getWishlistIdByPresentId(presentId);  // Call the repository method
     }
@@ -111,6 +95,7 @@ public class WishService {
         Present present = repository.getPresentById(id);
         return present;
     }
+
     public void deleteWishlist(int id, Integer userId) {
         Wishlist wishlist = repository.getWishlist(id);
         if(wishlist != null){
@@ -126,7 +111,4 @@ public class WishService {
         }
     }
 
-    public Wishlist findWishlistByName(String listName){
-        return repository.findWishlistByName(listName);
-    }
 }

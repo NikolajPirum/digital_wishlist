@@ -1,5 +1,6 @@
 package org.example.digital_wishlist.controller;
 
+import org.example.digital_wishlist.repository.WishRepository;
 import org.example.digital_wishlist.service.WishService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         @MockBean
         private WishService wishService;
+
+        @MockBean
+        private WishRepository wishRepository;
 
 
         @Test

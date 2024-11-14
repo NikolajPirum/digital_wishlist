@@ -1,7 +1,8 @@
 /* General page styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f7f6;
+    background-color: #2d2f31;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -9,60 +10,27 @@ body {
     margin: 0;
 }
 
+/* Container to hold both forms */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
 /* Form container styling */
 form {
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     padding: 20px;
-    max-width: 400px;
-    width: 100%;
-    margin: 20px;
-    text-align: center;
+    margin-bottom: 10px; /* Add space between forms */
+    color: #333333;
 }
 
-/* Form header */
-h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Label styling */
-label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-    text-align: left;
-}
-
-/* Input field styling */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: calc(100% - 22px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Button styling */
-button[type="submit"] {
+/* Button styling for both submit and login */
+button[type="submit"],
+button.btn {
+    display: inline-block;
     width: 100%;
     padding: 12px;
     font-size: 16px;
@@ -72,66 +40,12 @@ button[type="submit"] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-align: center;
     transition: background-color 0.3s;
+    margin-top: 5px;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover,
+button.btn:hover {
     background-color: #0056b3;
-}
-
-/* Success and error messages */
-p{
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    form {
-        padding: 15px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    button[type="submit"] {
-        padding: 10px;
-    }
-}
-
-/* Styling the navigation bar */
-.menubar {
-    padding: 10px 0;
-    text-align: center;  /* Center align the menu */
-}
-
-/* Styling the list container */
-.menubar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex; /* Makes the menu items horizontal */
-    justify-content: center; /* Centers the menu items */
-}
-
-/* Styling individual list items */
-.menubar li {
-    margin: 0 15px; /* Adds spacing between menu items */
-}
-
-/* Styling the links */
-.menubar a {
-    color: white;
-    background-color: #007bff;
-    height: fit-content;
-    text-decoration: none;
-    padding: 10px 20px;
-    display: block; /* Makes the entire area clickable */
-    font-weight: bold;
-}
-
-/* Hover effect for links */
-.menubar a:hover {
-    background-color: #007bff;
 }
