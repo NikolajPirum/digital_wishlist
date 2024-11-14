@@ -23,6 +23,10 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
+        env :
+          MYSQL_URL: ${{ secrets.MYSQL_URL }}
+          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
@@ -49,9 +53,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AF11807FB4F9429E8F77097DC35B000F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_365FACC7EA2D43F4A29AFE2E492F7A65 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_69A441C0D53E4C15A12B45AAF23789A7 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3DBCB1E9E3D74698A6D4FC54003347A3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7F5CC64AE7B44D29C69D1F9FB06C0EA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_307BA968D4AE482197B19406132A2072 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

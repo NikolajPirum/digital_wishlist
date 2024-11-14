@@ -36,9 +36,19 @@ public class WishRepository {
             rs.getString("Link")
     );
 
-    public void createUser(User user1){
-        String query = "insert into AppUser (name, email, username, password) values (?, ?, ?, ?)";
-        jdbcTemplate.update(query, user1.getName(), user1.getEmail(), user1.getUsername(), user1.getPassword());
+    public void createUser(User user){
+        String query = "insert into AppUser (Name, Username, Password, Email) values (?, ?, ?, ?)";
+
+        int rowsAffected = jdbcTemplate.update(
+                query,
+                user.getName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail()
+        );
+        if (rowsAffected != 1) {
+            throw new RuntimeException("Failed to create user: " + user);
+        }
     }
 
     public int deleteWish(int id){
@@ -53,7 +63,7 @@ public class WishRepository {
     }
 
     public List<Wishlist> getAllWishLists(){
-        String query = "select * from WishList";
+        String query = "select * from wishlist";
         return jdbcTemplate.query(query, wishlistRowMapper);
     }
 
