@@ -23,19 +23,10 @@ import java.util.Map;
 public class WishController {
 
     private final WishService service;
-    private final WishRepository repository;
 
-    public WishController(WishService service, WishRepository repository) {
+    public WishController(WishService service) {
         this.service = service;
-        this.repository = repository;
     }
-    /*
-    @GetMapping("/favicon.ico")
-    public void favicon() {
-        // Do nothing or log the request if needed
-    }
-
-     */
 
     @GetMapping("/overview")
     public String overview(Model model,HttpSession session) {
@@ -49,18 +40,20 @@ public class WishController {
 
         return "wishListSite";
     }
+    @GetMapping("/favicon.ico")
+    @ResponseBody
+    public void returnFavicon() {
+        // You can leave this method empty, or return an actual favicon if desired
+    }
 
     @GetMapping("/overview/noaccess")
     public String overviewNoAccess(Model model) {
         List<Wishlist> wishlists = service.getAllWishLists();
 
-        model.addAttribute("wishlists", wishlists);
+        model.addAttribute("wishlists",wishlists);
 
         return "wishListSiteNoAccess";
     }
-
-    // lave en anden metode der viser en begrænset html fil
-
 
     // problemer med status i present (reserve)
     @GetMapping("/{id}")
@@ -167,6 +160,7 @@ public class WishController {
         model.addAttribute("user", new User());
         return "login";
     }
+
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpSession session, Model model) {
         try {
@@ -193,16 +187,10 @@ public class WishController {
         }
     }
 
-
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/login";
-    }
-    @GetMapping("/favicon.ico")
-    @ResponseBody
-    public void returnFavicon() {
-        // You can leave this method empty, or return an actual favicon if desired
     }
 
     @PostMapping("/reserve")
@@ -288,7 +276,7 @@ public class WishController {
     @PostMapping("/update/present")
     public String updatePresent(@ModelAttribute ("present") Present present){
       service.updatePresent(present);
-        return "redirect:/overview";
+        return "redirect:/overview/noaccess";
     }
 
     @PostMapping("/{id}/deletebyid")

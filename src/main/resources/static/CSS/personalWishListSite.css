@@ -119,3 +119,27 @@ form input[type="submit"]:hover {
 .menubar a:hover {
     background-color: #007bff;
 }
+
+/* Styling for the Logout link container */
+.logout-container {
+    display: flex;
+    justify-content: center; /* Center align the Logout link */
+    margin-top: 20px;
+}
+
+/* Styling for the Logout button to match other menu items but narrower */
+.logout-button {
+    color: white;
+    background-color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    width: auto; /* Makes it as wide as the content */
+    text-align: center;
+}
+
+.logout-button:hover {
+    background-color: #0056b3;
+}
