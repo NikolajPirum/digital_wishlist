@@ -25,7 +25,7 @@
             <input type="submit" value="Delete wishlist">
         </form>
 
-        <form th:action="@{'/' + ${wishlist.listName} + '/update'}" method="POST">
+        <form th:action="@{'/' + ${wishlist.id}}" method="GET">
             <input type="submit" value="Update wishlist">
         </form>
 

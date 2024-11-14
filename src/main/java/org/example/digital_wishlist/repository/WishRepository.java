@@ -135,6 +135,8 @@ public class WishRepository {
         }, username);
     }
 
+
+
     // Using JdbcTemplate to check if email exists
     public boolean findUserByEmail(String email) {
         String query = "SELECT COUNT(*) FROM AppUser WHERE email = ?";

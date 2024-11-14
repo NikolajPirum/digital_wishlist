@@ -27,9 +27,11 @@ public class Present {
     public String getPresentName() {
         return presentName;
     }
+
     public void setPresentName(String presentName) {
         this.presentName = presentName;
     }
+
     public String getBrand() {
         return brand;
     }
