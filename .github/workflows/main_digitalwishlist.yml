@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - digitalWishlist
 
 on:
@@ -20,10 +23,6 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        env:
-          MYSQL_URL: ${{ secrets.MYSQL_URL }}
-          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
@@ -37,23 +36,22 @@ jobs:
     needs: build
     environment:
       name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
-      contents: read
-
+      id-token: write #This is required for requesting the JWT
+  
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
-
+      
       - name: Login to Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          enable-AzPSSession: true
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3DBCB1E9E3D74698A6D4FC54003347A3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C7F5CC64AE7B44D29C69D1F9FB06C0EA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_307BA968D4AE482197B19406132A2072 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,3 +60,4 @@ jobs:
           app-name: 'digitalWishlist'
           slot-name: 'Production'
           package: '*.jar'
+          
