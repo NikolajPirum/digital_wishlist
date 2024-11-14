@@ -53,7 +53,6 @@ public class Wishlist {
     public int getId() {
         return wishlistID;
     }
-
     public String getListName() {
         return listName;
     }
