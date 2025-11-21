@@ -37,7 +37,7 @@ public class WishRepository {
     );
 
     public void createUser(User user){
-        String query = "insert into AppUser (Name, Username, Password, Email) values (?, ?, ?, ?)";
+        String query = "insert into appuser (Name, Username, Password, Email) values (?, ?, ?, ?)";
 
         int rowsAffected = jdbcTemplate.update(
                 query,
@@ -117,13 +117,13 @@ public class WishRepository {
 
 
     public boolean findByUsername(String username) {
-        String query = "SELECT COUNT(*) FROM AppUser WHERE username = ?";
+        String query = "SELECT COUNT(*) FROM appuser WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, username);
         return count != null && count > 0;
     }
 
     public User findUser(String username) {
-        String query = "SELECT * FROM AppUser WHERE Username = ?";
+        String query = "SELECT * FROM appuser WHERE Username = ?";
         return jdbcTemplate.queryForObject(query, (rs, rowNum) -> {
             User user = new User();
             user.setId(rs.getInt("UserID")); // Map UserID column to userId field
@@ -139,7 +139,7 @@ public class WishRepository {
 
     // Using JdbcTemplate to check if email exists
     public boolean findUserByEmail(String email) {
-        String query = "SELECT COUNT(*) FROM AppUser WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM appuser WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, email);
         return count != null && count > 0;
     }
